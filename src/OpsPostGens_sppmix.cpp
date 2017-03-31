@@ -14,8 +14,8 @@ List GetStats_sppmix(vec const& gens,
   vec CS(2);
   vec sortedgens=sort(gens);
   //  Rcout << sortedgens<< std::endl ;
-  CS(1)=sortedgens(floor((1-alpha/2)*L));
-  CS(0)=sortedgens(floor(alpha*L/2));
+  CS(1)=sortedgens((int)floor((1-alpha/2.0)*L));
+  CS(0)=sortedgens((int)floor(alpha*L/2.0));
   return List::create(
     Named("Min") = gens.min(),
     Named("Mean") = mu,
@@ -766,7 +766,7 @@ List GetDensityValues_sppmix(
     sig(2,2),invsig(2,2);
   double meanlamda=mean(genlambdas),
     constij,sumdev=0,lognfac=
-    log(sqrt(2*datum::pi*n))+n*log(n)-n;
+    log(sqrt(2.0*datum::pi*n))+n*log(1.0*n)-n;
   //use stirling formula for
   //n!~=sqrt(2*datum::pi*n)*n^n*exp(-n)
   //for priors

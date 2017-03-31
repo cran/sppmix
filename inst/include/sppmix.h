@@ -23,7 +23,7 @@ List DAMCMC2d_sppmix(mat const& data,
                      bool const& truncate,
                      vec const& hyperparams);
 
-//Marked IPPP conditinal on location
+//Marked IPPP conditional on location
 //file: MIPPCondLoc_sppmix.cpp
 List MIPPCondLoc_sppmix(mat const& points,
   vec const& marks,vec const& xlims,

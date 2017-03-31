@@ -33,7 +33,7 @@ double ApproxBivNormProb_sppmix(vec const& xlims,
   infin(0) = type;
   infin(1) = type;
 
-  double abseps=1/1000, releps=1/1000, error, value;
+  double abseps=1.0/1000.0, releps=1.0/1000.0, error, value;
   int rnd=0;
   double corr=sigma(0, 1) / sqrt(sigma(0, 0) * sigma(1, 1));
 

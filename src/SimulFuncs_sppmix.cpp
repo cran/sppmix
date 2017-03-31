@@ -15,12 +15,10 @@ mat rnorm2_sppmix(int const& n,vec const& mu,
   colvec Z1 = Z.col(0),Z2 = Z.col(1);
   Gens.col(0) = sig1*Z1+mu(0);
   Gens.col(1) = sig2*(rho*Z1+
-    sqrt(1-rho*rho)*Z2)+mu(1);
+    sqrt(1.0-rho*rho)*Z2)+mu(1);
   //  if(det(sigma)<=0){Rcout << "\n"<<"sigma not pd "<<det(sigma)<<"\n"<<std::endl;}
   return Gens;
 }
-
-
 
 // [[Rcpp::export]]
 mat rWishart_sppmix(int const& df, mat const& A){
@@ -49,10 +47,10 @@ int rDiscrete_sppmix(int const& start,vec const& probs)
 int rBinom_sppmix(int const& n,
                   double const& p){
   vec probs(n+1);
-  probs(0)=pow(1-p,n);
+  probs(0)=pow(1.0-p,1.0*n);
   for(int i=1;i<n;i++)
     probs(i)=((n-i+1.0)/i)*(p/(1-p))*probs(i-1);
-  probs(n)=pow(p,n);
+  probs(n)=pow(p,1.0*n);
   //  Rcout << probs<< std::endl ;
   return rDiscrete_sppmix(0,probs);
 }
@@ -178,7 +176,7 @@ List rNormMix_sppmix(int const& lamda,
     Named("comp") = comps);
 }
 
-inline int randWrapper(const int n) { return floor(unif_rand()*n); }
+inline int randWrapper(const int n) { return (int)floor(1.0*unif_rand()*n); }
 
 // [[Rcpp::export]]
 vec rPerm_sppmix(int const& n)

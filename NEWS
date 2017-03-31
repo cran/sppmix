@@ -1,0 +1,4 @@
+Version 1.0.1
+
+Solaris Platform: Fixed ambiguity problems so that the package can properly compile in Solaris
+
