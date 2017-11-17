@@ -22,23 +22,19 @@ Calculates the mass of the density of each component of a normal mixture over a 
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #approx_normmix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix = normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2),
  c(.8, .8)), sigmas =list(.01*diag(2),.01*diag(2)))
-summary(truemix)
-approx_normmix(truemix,xlim= c(0, 1), ylim = c(0, 1))
 approx_normmix(truemix,xlim= c(-2, 2), ylim = c(-2, 2))}
 
-}
-\author{
-Jiaxun Chen, Yuchen Wang
 }
 \seealso{
 \code{\link{normmix}}
 }
-
+\author{
+Jiaxun Chen, Yuchen Wang
+}

@@ -28,12 +28,11 @@ number of components. Use \code{\link{GetPMEst}} if you want just the surface.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetBDCompfit}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_bdmcmc(pp = spatstat::redwood, m = 7)
 GetBDTable(fit)
 #retrieve all BDMCMC realizations corresponding to a mixture with 5 components
@@ -45,13 +44,12 @@ plot(BDfit5comp$BDnormmix,xlim =BDfit5comp$BDsurf$window$xrange,ylim =
 plot(BDfit5comp$BDgens)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_bdmcmc}},
 \code{\link{GetBDTable}},
 \code{\link{plot.damcmc_res}},
 \code{\link{plot.normmix}}
 }
-
+\author{
+Sakis Micheas
+}

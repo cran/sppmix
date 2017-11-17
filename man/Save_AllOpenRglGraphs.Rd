@@ -4,7 +4,7 @@
 \alias{Save_AllOpenRglGraphs}
 \title{Saves RGL plots}
 \usage{
-Save_AllOpenRglGraphs(dir1 = getwd(), filename1 = "RglGraph")
+Save_AllOpenRglGraphs(dir1, filename1 = "RglGraph")
 }
 \arguments{
 \item{dir1}{Directory to save the plots.}
@@ -17,20 +17,18 @@ and using a template name.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Save_AllOpenRglGraphs}
 }
 \examples{
+\donttest{
+# use a temporary directory to save the plots
+Save_AllOpenRglGraphs(dir1=tempdir())}
 
-\dontrun{
-# use current directory to save the plots
-Save_AllOpenRglGraphs()}
-
-}
-\author{
-Sakis Micheas
 }
 \seealso{
 \code{\link{Plots_off}}
 }
-
+\author{
+Sakis Micheas
+}

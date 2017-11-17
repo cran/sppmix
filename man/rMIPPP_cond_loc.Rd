@@ -116,7 +116,7 @@ for the number of events in the point pattern.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #rMIPPP_cond_loc}
 }
 \details{
@@ -171,8 +171,7 @@ See Micheas (2014) for more details on
 Marked IPPP models via conditioning arguments.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # Create a marked point pattern; use randomization and discrete marks (default values)
 newMPP=rMIPPP_cond_loc()
 plot(newMPP$surf,main="True IPPP intensity surface for the locations")
@@ -190,13 +189,12 @@ newMPP=rMIPPP_cond_loc(mark_distr_choice=1, discrete_mark = FALSE)
 plot(newMPP$surf,main="True IPPP intensity surface for the locations")}
 
 }
-\author{
-Sakis Micheas
-}
 \references{
 Hierarchical Bayesian Modeling of Marked Non-Homogeneous Poisson Processes with finite mixtures and inclusion of covariate information. Micheas, A.C. (2014). Journal of Applied Statistics, 41, 12, 2596-2615, DOI: 10.1080/02664763.2014.922167.
 }
 \seealso{
 \code{\link{plot_MPP_fields}}
 }
-
+\author{
+Sakis Micheas
+}

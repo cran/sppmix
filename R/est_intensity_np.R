@@ -6,7 +6,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #est_intensity_np}
 #'
 #' @param pattern A two-dimesional spatial point pattern in
@@ -28,8 +28,7 @@
 #' \code{\link{plotmix_3d}}
 #' @author Jiaxun Chen, Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' mix1 <- rnormmix(5, sig0 = .01, df = 5, xlim=c(0, 5),ylim=c(0, 5))
 #' intsurf1=to_int_surf(mix1,lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
 #' plot(intsurf1)

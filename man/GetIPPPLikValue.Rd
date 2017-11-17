@@ -22,12 +22,11 @@ calculates the IPPP likelihood value.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetIPPPLikValue}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf <- rmixsurf(m = 3, lambda=100,xlim = c(-3,3),ylim = c(-3,3))
 plot(truemix_surf,main="True IPPP intensity surface")
 genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -37,13 +36,12 @@ GetIPPPLikValue(genPPP,MAPest)
 GetIPPPLikValue(genPPP,GetPMEst(fit))}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_damcmc}},
 \code{\link{rmixsurf}},
 \code{\link{rsppmix}},
 \code{\link{GetPMEst}}
 }
-
+\author{
+Sakis Micheas
+}

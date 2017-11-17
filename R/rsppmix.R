@@ -18,12 +18,14 @@ gen_n_from_mix <- function(n, mix) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rsppmix}
 #'
 #' @param intsurf Object of class \code{intensity_surface} or \code{normmix}.
 #' @param truncate Logical variable indicating that the points should be
 #' within the window of observation. Default is TRUE.
+#' @param marks An optional vector defining the mark space. A mark value is randomly selected and attached to the generated locations.
+#' Default is NULL, so that we create an unmarked point pattern.
 #' @param ... Further parameters passed to \code{to_int_surf()}.
 #'
 #' @return A point pattern of class \code{c("sppmix", "ppp")}. The object has
@@ -39,7 +41,7 @@ gen_n_from_mix <- function(n, mix) {
 #'
 #' window : the window of observation (an object of class \code{\link[spatstat]{owin}}),
 #'
-#' marks : optional vector or data frame of marks,
+#' marks : optional vector of marks,
 #'
 #' comp : vector of true allocation variables.
 #'
@@ -86,6 +88,7 @@ gen_n_from_mix <- function(n, mix) {
 #' the function will not check if the points are inside the window.
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
 #' @seealso \code{\link{normmix}},
+#' \code{\link{rmixsurf}},
 #' \code{\link[spatstat]{square}},
 #' \code{\link{rsppmix}},
 #' \code{\link{plot.sppmix}},
@@ -95,8 +98,7 @@ gen_n_from_mix <- function(n, mix) {
 #' \code{\link{rnormmix}},
 #' \code{\link{plotmix_3d}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # create the true mixture
 #' truemix_surf <- normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7), c(0.5, 0.5)),
 #'  sigmas = list(.01*diag(2), .03*diag(2), .02*diag(2)), lambda=100, win=spatstat::square(1))
@@ -125,10 +127,16 @@ gen_n_from_mix <- function(n, mix) {
 #' genPPP5=rsppmix(intsurf = truemix_surf, truncate = FALSE)
 #' plotmix_2d(truemix_surf,genPPP5)
 #' plotmix_2d(truemix_surf,genPPP5, win = spatstat::square(2))
-#' plotmix_2d(truemix_surf,genPPP5,contour=TRUE)}
-#'
+#' plotmix_2d(truemix_surf,genPPP5,contour=TRUE)
+#' intsurf6=rmixsurf(m=5,lambda=rgamma(1,shape=10,scale=5),
+#'  df=5,sig0=1,rand_m=TRUE,mu0 = c(.5,.5),Sigma0 = 0.001*diag(2))
+#' genPPP6=rsppmix(intsurf6,marks=1:3,truncate = FALSE)
+#' plotmix_2d(intsurf6,genPPP6)
+#' plot(genPPP6,showmarks=TRUE)}
 #' @export
-rsppmix <- function(intsurf, truncate = TRUE, ...) {
+rsppmix <- function(intsurf, truncate = TRUE,
+                    marks=NULL,...)
+{
 
   intsurf <- to_int_surf(intsurf, ...)
   win <- intsurf$window
@@ -150,8 +158,20 @@ rsppmix <- function(intsurf, truncate = TRUE, ...) {
     warning(paste(sum(!spatstat::inside.owin(spp[, 1], spp[, 2], win)),
                   "points are outside the window."))
   }
-
-  RVAL <- as.ppp(spp[, 1:2], W=win, check = truncate)
+  if(!is.null(marks))
+  {
+    if(!is.vector(marks))
+      stop("marks argument is not a vector")
+    msize=length(marks)
+    tags=sample(x=1:msize,size=n,replace=TRUE)
+    markvalues=rep(0,n)
+    for(i in 1:n)
+      markvalues[i]=marks[tags[i]]
+    RVAL <- ppp(x=spp[, 1],y=spp[, 2],window=win, marks=markvalues, check = truncate)
+    RVAL$markformat="vector"
+  }
+  else
+    RVAL <- as.ppp(spp[, 1:2], W=win, check = truncate)
   RVAL$comp <- spp[, 3]
   class(RVAL) <- c("sppmix", "ppp")
   return(RVAL)

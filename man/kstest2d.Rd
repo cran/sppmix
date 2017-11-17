@@ -23,12 +23,11 @@ test on two point patterns.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #kstest2d}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # generate two point patterns
 mix1 <- rnormmix(3, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 intsurf1=to_int_surf(mix1,lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
@@ -44,9 +43,6 @@ kstest2d(pp1, pp2)
 kstest2d(pp2, pp3)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \references{
 Peacock, J.A. (1983). Two-dimensional goodness-of-fit testing in
 astronomy. Monthly Notices Royal Astronomy Society, 202, 615-627.
@@ -56,4 +52,6 @@ Adapted from Matlab code by Dylan Muir.
 \seealso{
 \code{\link{rnormmix}},\code{\link{to_int_surf}},\code{\link[spatstat]{owin}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

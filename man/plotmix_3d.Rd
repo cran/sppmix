@@ -27,12 +27,11 @@ is given, the function multiplies the density with
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plotmix_3d}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(0, 3), ylim = c(0, 3))
 normdens=dnormmix(truemix, xlim= c(0, 3), ylim = c(0, 3))
 plotmix_3d(normdens)
@@ -50,11 +49,10 @@ normdens2=dnormmix(demo_truemix3comp, xlim= c(-1, 1), ylim = c(-2, 3))
 plotmix_3d(normdens2, title1="Density of a normal mixture, 3 components")}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{rnormmix}},
 \code{\link{dnormmix}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

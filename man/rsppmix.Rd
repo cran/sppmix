@@ -5,7 +5,7 @@
 \alias{summary.sppmix}
 \title{Generate a point pattern from a Poisson process}
 \usage{
-rsppmix(intsurf, truncate = TRUE, ...)
+rsppmix(intsurf, truncate = TRUE, marks = NULL, ...)
 
 \method{summary}{sppmix}(object, ...)
 }
@@ -14,6 +14,9 @@ rsppmix(intsurf, truncate = TRUE, ...)
 
 \item{truncate}{Logical variable indicating that the points should be
 within the window of observation. Default is TRUE.}
+
+\item{marks}{An optional vector defining the mark space. A mark value is randomly selected and attached to the generated locations.
+Default is NULL, so that we create an unmarked point pattern.}
 
 \item{...}{Further parameters passed to \code{to_int_surf()}.}
 
@@ -33,7 +36,7 @@ n : the number of events,
 
 window : the window of observation (an object of class \code{\link[spatstat]{owin}}),
 
-marks : optional vector or data frame of marks,
+marks : optional vector of marks,
 
 comp : vector of true allocation variables.
 }
@@ -44,7 +47,7 @@ a mixture of normal components.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #rsppmix}
 }
 \details{
@@ -91,8 +94,7 @@ in the window (rejection method). If \code{truncate = FALSE},
 the function will not check if the points are inside the window.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # create the true mixture
 truemix_surf <- normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7), c(0.5, 0.5)),
  sigmas = list(.01*diag(2), .03*diag(2), .02*diag(2)), lambda=100, win=spatstat::square(1))
@@ -121,14 +123,16 @@ genPPP4=rsppmix(truemix, lambda = 100, win = spatstat::square(3))
 genPPP5=rsppmix(intsurf = truemix_surf, truncate = FALSE)
 plotmix_2d(truemix_surf,genPPP5)
 plotmix_2d(truemix_surf,genPPP5, win = spatstat::square(2))
-plotmix_2d(truemix_surf,genPPP5,contour=TRUE)}
-
-}
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
+plotmix_2d(truemix_surf,genPPP5,contour=TRUE)
+intsurf6=rmixsurf(m=5,lambda=rgamma(1,shape=10,scale=5),
+ df=5,sig0=1,rand_m=TRUE,mu0 = c(.5,.5),Sigma0 = 0.001*diag(2))
+genPPP6=rsppmix(intsurf6,marks=1:3,truncate = FALSE)
+plotmix_2d(intsurf6,genPPP6)
+plot(genPPP6,showmarks=TRUE)}
 }
 \seealso{
 \code{\link{normmix}},
+\code{\link{rmixsurf}},
 \code{\link[spatstat]{square}},
 \code{\link{rsppmix}},
 \code{\link{plot.sppmix}},
@@ -138,4 +142,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{rnormmix}},
 \code{\link{plotmix_3d}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

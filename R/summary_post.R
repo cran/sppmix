@@ -5,7 +5,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #summary.damcmc_res}
 #'
 #' @param object Object of class \code{damcmc_res}.
@@ -26,8 +26,7 @@
 #' \code{\link{est_mix_damcmc}},
 #' \code{\link[spatstat]{owin}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate data
 #' truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 #' summary(truemix)
@@ -119,7 +118,7 @@ summary.damcmc_res <- function(object, burnin = object$L / 10, alpha=0.05,dgt = 
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #summary.bdmcmc_res}
 #'
 #' @param object Object of class \code{bdmcmc_res}.
@@ -138,8 +137,7 @@ summary.damcmc_res <- function(object, burnin = object$L / 10, alpha=0.05,dgt = 
 #' (formatting the output).
 #' @param ... Additional arguments for the S3 method.
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate data
 #' truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 #' summary(truemix)

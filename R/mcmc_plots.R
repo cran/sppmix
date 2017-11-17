@@ -6,7 +6,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_chains}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -26,8 +26,7 @@
 #' \code{\link{FixLS_da}}
 #' @author Jiaxun Chen, Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_damcmc(pp = spatstat::redwood, m = 10)
 #' plot(fit)
 #' plot_chains(fit)
@@ -162,7 +161,7 @@ plot_chains <- function(fit, burnin = floor(fit$L / 10), chain = c("p", "x", "y"
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_ind}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -172,8 +171,7 @@ plot_chains <- function(fit, burnin = floor(fit$L / 10), chain = c("p", "x", "y"
 #' @seealso \code{\link{est_mix_damcmc}}
 #' @author Sakis Micheas, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_damcmc(pp = spatstat::redwood, m = 10)
 #' plot_ind(fit)}
 #'
@@ -229,7 +227,7 @@ plot_ind <- function(fit, burnin = floor(fit$L / 10),
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_avgsurf}
 #'
 #' @param fit An object the contains all posterior realizations, e.g., the return
@@ -255,8 +253,7 @@ plot_ind <- function(fit, burnin = floor(fit$L / 10),
 #' \code{\link{plotmix_3d}},
 #' \code{\link{GetPMEst}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-1, 1), ylim =c(0, 3))
 #' trueintsurf=to_int_surf(truemix, lambda = 200, win =spatstat::owin( c(-1, 1),c(0, 3)))
 #' plot(trueintsurf, main = "True Poisson intensity surface (mixture of normal components)")
@@ -383,7 +380,7 @@ plot_avgsurf <- function(fit,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot.damcmc_res}
 #'
 #' @param x Object of class \code{damcmc_res}.
@@ -397,8 +394,7 @@ plot_avgsurf <- function(fit,
 #' \code{\link{FixLS_da}},
 #' \code{\link{plot_chains}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_damcmc(pp = spatstat::redwood, m = 10)
 #' plot(fit)
 #' #Tornadoes
@@ -448,7 +444,7 @@ plot.damcmc_res <- function(
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot.bdmcmc_res}
 #'
 #' @param x Object of class \code{bdmcmc_res}.
@@ -482,8 +478,7 @@ plot.damcmc_res <- function(
 #' \code{\link{GetBMA}}
 #' \code{\link{GetBDTable}},
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_bdmcmc(pp = spatstat::redwood, m = 10)
 #' plot(fit)
 #' #Tornadoes
@@ -580,7 +575,7 @@ plot.bdmcmc_res <- function(x, win = fit$data$window,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_CompDist}
 #'
 #' @param fit Object of class \code{bdmcmc_res}.
@@ -588,8 +583,7 @@ plot.bdmcmc_res <- function(x, win = fit$data$window,
 #' @seealso \code{\link{est_mix_bdmcmc}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fitBD <- est_mix_bdmcmc(spatstat::redwood, m = 10)
 #' plot_CompDist(fitBD)
 #' CAfitBD=est_mix_bdmcmc(pp = CAQuakes2014.RichterOver3.0, m = 10)
@@ -627,7 +621,7 @@ plot_CompDist=function(fit,open_new_window=FALSE)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_runmean}
 #'
 #' @param chain An \code{Lx1} vector containing the \code{L} posterior realizations.
@@ -638,8 +632,7 @@ plot_CompDist=function(fit,open_new_window=FALSE)
 #' \code{\link{rmixsurf}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf)
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -668,6 +661,7 @@ plot_runmean<- function(chain,open_new_window = FALSE)
     ggplot2::theme_classic() +
     ggplot2::theme(panel.border = ggplot2::element_rect(fill = NA, size = 1)) +
     ggplot2::coord_cartesian(xlim =1:L,expand=FALSE)+
+    ggplot2::theme(plot.margin=ggplot2::unit(c(1,1,1,0), "lines"))+
     add_title("Running mean plot",L = L)
 
   plot_p
@@ -693,7 +687,7 @@ plot_runmean<- function(chain,open_new_window = FALSE)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_autocorr}
 #'
 #' @param chain An \code{Lx1} vector containing the \code{L} posterior realizations.
@@ -704,8 +698,7 @@ plot_runmean<- function(chain,open_new_window = FALSE)
 #' \code{\link{rmixsurf}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf)
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -739,6 +732,7 @@ plot_autocorr<- function(chain,
   ggplot2::theme_classic() +
   ggplot2::theme(panel.border = ggplot2::element_rect(fill = NA, size = 1)) +
   ggplot2::coord_cartesian(xlim =1:maxlag,expand=FALSE)+
+  ggplot2::theme(plot.margin=ggplot2::unit(c(1,1,1,0), "lines"))+
   add_title("Autocorrelation plot")
 
   plot_p
@@ -756,7 +750,7 @@ plot_autocorr<- function(chain,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_convdiags}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -770,8 +764,7 @@ plot_autocorr<- function(chain,
 #' \code{\link{plot_autocorr}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf)
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -817,15 +810,14 @@ plot_convdiags<- function(fit,burnin = floor(fit$L / 10),
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Plots_off}
 #'
 #' @seealso \code{\link{Save_AllOpenRglGraphs}}
 #'
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' Plots_off()}
 #'
 #' @export
@@ -846,7 +838,7 @@ Plots_off<- function()
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Save_AllOpenRglGraphs}
 #'
 #' @param dir1 Directory to save the plots.
@@ -854,16 +846,16 @@ Plots_off<- function()
 #' @author Sakis Micheas
 #' @seealso \code{\link{Plots_off}}
 #' @examples
-#'
-#' \dontrun{
-#' # use current directory to save the plots
-#' Save_AllOpenRglGraphs()}
+#' \donttest{
+#' # use a temporary directory to save the plots
+#' Save_AllOpenRglGraphs(dir1=tempdir())}
 #'
 #' @export
 Save_AllOpenRglGraphs<- function(
-  dir1=getwd(),filename1="RglGraph")
+  dir1,filename1="RglGraph")
 {
-  setwd(dir1)
+  if(missing(dir1))
+    stop("Please specify a directory wherein to save the RGL plots.")
   #  graphics.off()
   count=1;
   while (rgl::rgl.cur()>0)

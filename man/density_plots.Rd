@@ -39,12 +39,11 @@ density of a mixture of normal components.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot.normmix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # plot normmix density
 truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(-1, 2), ylim = c(-1, 2))
 summary(truemix)
@@ -60,13 +59,12 @@ trueintsurf=to_int_surf(truemix, lambda = 100, win=
 plot(trueintsurf)#plot the surface, it is lambda*normmix}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}},
 \code{\link[spatstat]{owin}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

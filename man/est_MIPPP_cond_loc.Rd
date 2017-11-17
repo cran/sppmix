@@ -8,7 +8,7 @@
 \usage{
 est_MIPPP_cond_loc(pp, r, hyper = 1, L = 10000, burnin = floor(L/10),
   m = 3, fit_groundIPPP = FALSE, truncate = FALSE, grayscale = FALSE,
-  discrete_mark = TRUE, LL = 150, open_new_window = FALSE,
+  startgamma, discrete_mark = TRUE, LL = 150, open_new_window = FALSE,
   show_plots = TRUE)
 
 \method{plot}{MIPPP_fit}(x, surf, open_new_window = FALSE,
@@ -22,7 +22,7 @@ est_MIPPP_cond_loc(pp, r, hyper = 1, L = 10000, burnin = floor(L/10),
 
 \item{r}{Radius used to define the neighborhood system. Any two locations within this distance are considered neighbors.}
 
-\item{hyper}{Hyperparameter for the distribution of gamma.}
+\item{hyper}{Hyperparameter for the proposal distribution of gamma. This is currently the standard deviation for the random walk Metropolis-Hastings steps (one step for each gamma). Use a small value.}
 
 \item{L}{Number of iterations for the MCMC; default is 10000.}
 
@@ -30,13 +30,15 @@ est_MIPPP_cond_loc(pp, r, hyper = 1, L = 10000, burnin = floor(L/10),
 
 \item{m}{The number of components to fit for the ground process when \code{fit_groundIPPP=TRUE}.}
 
-\item{fit_groundIPPP}{Logical variance requesting to fit and return the DAMCMC results of the gorund process.}
+\item{fit_groundIPPP}{Logical variable requesting to fit and return the DAMCMC results of the ground process.}
 
 \item{truncate}{Logical variable indicating whether or not we
 we only work with events within the window defined
 in the point pattern \code{pp}.}
 
 \item{grayscale}{Logical to request plots in grayscale.}
+
+\item{startgamma}{Initial value for the gamma vector. If missing the zero vector is used.}
 
 \item{discrete_mark}{Logical flag indicating whether the mark is a discrete (numerical value) or not.
 For continuous marks set this to FALSE.}
@@ -83,7 +85,7 @@ in future versions of the \code{sppmix} package.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #est_MIPPP_cond_loc}
 }
 \details{
@@ -130,8 +132,7 @@ See Micheas (2014) for more details on special cases (2 marks) of
 these Marked IPPP models via conditioning arguments.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # Create a marked point pattern
 x <- runif(100)
 y <- runif(100)
@@ -178,7 +179,8 @@ ret$p+ggplot2::geom_point(data=as.data.frame( Tornadoes2011MO),ggplot2::aes(x=x,
 # the marks must start from 1, recode the original
 Tornadoes2011MO1=Tornadoes2011MO
 Tornadoes2011MO1$marks=Tornadoes2011MO1$marks+1
-mpp_est=est_MIPPP_cond_loc(Tornadoes2011MO1,r=.5,hyper=1.0,fit_groundIPPP=TRUE)
+mpp_est=est_MIPPP_cond_loc(Tornadoes2011MO1,r=1.5,hyper=0.01,
+ startgamma = c(.1,.2,.3,.4,.5,.6),fit_groundIPPP=TRUE)
 #Now generate an MIPPP with 3 marks
 newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5))
 summary(newMPP)
@@ -198,9 +200,6 @@ plot(mpp_est)
 plot(mpp_est,newMPP$surf)}
 
 }
-\author{
-Sakis Micheas, Jiaxun Chen
-}
 \references{
 Hierarchical Bayesian Modeling of Marked Non-Homogeneous Poisson Processes with finite mixtures and inclusion of covariate information. Micheas, A.C. (2014). Journal of Applied Statistics, 41, 12, 2596-2615, DOI: 10.1080/02664763.2014.922167.
 }
@@ -208,4 +207,6 @@ Hierarchical Bayesian Modeling of Marked Non-Homogeneous Poisson Processes with 
 \code{\link{GetStats}},
 \code{\link{rMIPPP_cond_loc}}
 }
-
+\author{
+Sakis Micheas, Jiaxun Chen
+}

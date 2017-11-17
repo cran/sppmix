@@ -34,12 +34,11 @@ Prints a brief summary of the results of a BDMCMC fit.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #summary.bdmcmc_res}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # generate data
 truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 summary(truemix)
@@ -53,9 +52,6 @@ summary(postfit, num_comp=2)
 summary(postfit, num_comp=c(2,4))}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rnormmix}},
 \code{\link{to_int_surf}},
@@ -63,4 +59,6 @@ Sakis Micheas
 \code{\link{est_mix_bdmcmc}},
 \code{\link[spatstat]{owin}}
 }
-
+\author{
+Sakis Micheas
+}

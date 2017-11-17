@@ -8,7 +8,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #normmix}
 #'
 #' @param ps Vector of component probabilities.
@@ -43,9 +43,8 @@
 #' @seealso \code{\link{rnormmix}} for
 #' generating a mixture with random parameters.
 #' @author Yuchen Wang, Sakis Micheas
-#'@examples
-#'
-#' \dontrun{
+#' @examples
+#' \donttest{
 #' mix1 <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)),
 #'  sigmas = list(.01*diag(2), .01*diag(2)))
 #' mix1
@@ -167,14 +166,18 @@ summary.intensity_surface <- function(object,...) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rnormmix}
 #'
 #' @param m Number of components of the mixture.
-#' @param sig0 Tuning parameter for generating a random matrix from a Wishart
+#' @param sig0 Tuning parameter for generating a random matrix from an Inverse Wishart
 #' distribution. If this argument is missing it is set to .1 of the minimum width/height of the window.
-#' @param df Degrees of freedom for generating a random matrix from a Wishart
+#' @param df Degrees of freedom for generating a random matrix from an Inverse Wishart
 #' distribution. Default is 10.
+#' @param dvec A vector of weights used in the Dirichlet distribution used to sample the mixture probabilities. If the dimension of dvec is not
+#' the same as the number of components, then dvec is either truncated to the same dimension or repeated to have dimension m. If missing, a vector of ones is used.
+#' @param mu0,Sigma0 Mean and covariance matrix for a multivariate normal distribution, used to generate all component means. If mu0 is missing the center of the window
+#' is used. If Sigma0 is missing it is set to the identity matrix. If both mu0 and Sigma0 are missing, the component means are generated uniformly over the window of observation.
 #' @param rand_m Request a random number of components.
 #' When \code{rand_m = TRUE}, the function will
 #' randomly choose a number of components from
@@ -183,10 +186,9 @@ summary.intensity_surface <- function(object,...) {
 #' The component means are sampled uniformly over this window.
 #'
 #' @return Object of class \code{normmix}.
-#' @author Yuchen Wang, Sakis Micheas
+#' @author Sakis Micheas, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' mix1 <- rnormmix(m = 3, sig0 = .1, df = 5)
 #' summary(mix1)
 #' mix2 <- rnormmix(m = 5, sig0 = .1, df = 5, rand_m = TRUE, ylim = c(0, 5))
@@ -194,25 +196,48 @@ summary.intensity_surface <- function(object,...) {
 #'
 #' @export
 rnormmix <- function(m, sig0, df=10, rand_m = FALSE,
-                     xlim = c(0, 1), ylim = c(0, 1)) {
-  if (rand_m) {
+                     xlim = c(0, 1), ylim = c(0, 1),
+                     dvec,mu0,Sigma0)
+{
+  if (rand_m)
+  {
     # number of components is random
     m <- sample(1:m, 1)
   }
+  if(missing(dvec))
+    dvec=rep(1, m)
+  else
+    dvec=suppressWarnings(as.vector(matrix(data=dvec,nrow=m,ncol=1)))
+  #  cat(dvec)
+  gen_ps <- rDirichlet_sppmix(dvec)
+
+  if(missing(mu0))
+  {
+    mu0=c(mean(xlim),mean(ylim))
+    if(missing(Sigma0))
+      gen_mu <- cbind(x = runif(m, xlim[1], xlim[2]),
+                      y = runif(m, ylim[1], ylim[2]))
+    else
+      gen_mu <- rnorm2_sppmix(m,mu0,Sigma0)
+  }
+  else
+  {
+    if(missing(Sigma0))
+      gen_mu <- rnorm2_sppmix(m,mu0,diag(2))
+    else
+      gen_mu <- rnorm2_sppmix(m,mu0,Sigma0)
+  }
+
   if(missing(sig0))
     sig0=.1*min(c(xlim[2]-xlim[1],
                   ylim[2]-ylim[1]))
-  gen_ps <- rDirichlet_sppmix(rep(1, m))
-  gen_mu <- cbind(x = runif(m, xlim[1], xlim[2]),
-                  y = runif(m, ylim[1], ylim[2]))
-  gen_sigma <- stats::rWishart(m, df, sig0 * diag(2))
-
+  gen_sigma <- stats::rWishart(m, df, sig0^(-2) * diag(2))
   mus <- vector(mode = "list", length = m)
   sigmas <- vector(mode = "list", length = m)
 
   for (k in 1:m) {
     mus[[k]] <- gen_mu[k, ]
-    sigmas[[k]] <- gen_sigma[, , k]
+    sigmas[[k]] <- solve(gen_sigma[, , k])
   }
 
   normmix(gen_ps, mus, sigmas)
@@ -224,11 +249,12 @@ rnormmix <- function(m, sig0, df=10, rand_m = FALSE,
 #' This function creates a Poisson point process intensity
 #' surface modeled as a mixture of normal components, on the given
 #' 2d window. The means, covariances and component probabilities
-#' are chosen randomly. The number of components can be either fixed or random.
+#' are chosen randomly based on parameters passed to the
+#' function. The number of components can be either fixed or random.
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rmixsurf}
 #'
 #' @param m Number of components of the mixture. If omitted, m is uniformly selected from
@@ -236,9 +262,13 @@ rnormmix <- function(m, sig0, df=10, rand_m = FALSE,
 #' @param lambda Average number of points over the window. If omitted
 #' lambda is generated from a Gamma with shape~Unif(1,10) and
 #' scale~Unif(50,100).
-#' @param sig0 Tuning parameter for generating a random matrix from a Wishart
+#' @param dvec A vector of weights used in the Dirichlet distribution used to sample the mixture probabilities. If the dimension of dvec is not
+#' the same as the number of components, then dvec is either truncated to the same dimension or repeated to have dimension m. If missing, a vector of ones is used.
+#' @param mu0,Sigma0 Mean and covariance matrix for a multivariate normal distribution, used to generate all component means. If mu0 is missing the center of the window
+#' is used. If Sigma0 is missing it is set to the identity matrix. If both mu0 and Sigma0 are missing, the component means are generated uniformly over the window of observation.
+#' @param sig0 Tuning parameter for generating a random matrix from an Inverse Wishart
 #' distribution.
-#' @param df Degrees of freedom for generating a random matrix from a Wishart
+#' @param df Degrees of freedom for generating a random matrix from an Inverse Wishart
 #' distribution.
 #' @param rand_m Request a random number of components.
 #' When \code{rand_m = TRUE}, the function will
@@ -253,8 +283,7 @@ rnormmix <- function(m, sig0, df=10, rand_m = FALSE,
 #' \code{\link{summary.intensity_surface}},
 #' \code{\link{plot.intensity_surface}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' mixsurf1 <- rmixsurf(m = 3, lambda=100)
 #' summary(mixsurf1)
 #' plot(mixsurf1)
@@ -262,11 +291,16 @@ rnormmix <- function(m, sig0, df=10, rand_m = FALSE,
 #' mixsurf2 <- rmixsurf(m = 5, lambda=200, rand_m = TRUE, ylim = c(-3, 3))
 #' summary(mixsurf2)
 #' plot(mixsurf2)
-#' plotmix_2d(mixsurf2)}
+#' plotmix_2d(mixsurf2)
+#' mixsurf3 <- rmixsurf(m = 5, lambda=200, rand_m = TRUE, Sigma0=.01*diag(2))
+#' summary(mixsurf3)
+#' plot(mixsurf3)
+#' plotmix_2d(mixsurf3)}
 #'
 #' @export
 rmixsurf <- function(m,lambda, sig0, df, rand_m = FALSE,
-                     xlim , ylim)
+                     xlim , ylim,
+                     dvec,mu0,Sigma0)
 {
   if(missing(m))
     m=sample(1:10,1)
@@ -281,10 +315,10 @@ rmixsurf <- function(m,lambda, sig0, df, rand_m = FALSE,
   if(missing(ylim))
     ylim = c(0, 1)
 
-  mix <- rnormmix(m, sig0, df,rand_m,xlim,ylim)
+  mix <- rnormmix(m, sig0, df,rand_m,xlim,ylim,dvec,mu0,Sigma0)
 
   intsurf <- normmix(mix$ps, mix$mus, mix$sigmas,
-      lambda,spatstat::owin(xlim,ylim),FALSE)
+                     lambda,spatstat::owin(xlim,ylim),FALSE)
 
   return(intsurf)
 }
@@ -300,7 +334,7 @@ rmixsurf <- function(m,lambda, sig0, df, rand_m = FALSE,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #to_int_surf}
 #'
 #' If the class of \code{mix} is \code{normmix},
@@ -322,8 +356,7 @@ rmixsurf <- function(m,lambda, sig0, df, rand_m = FALSE,
 #' @return Object of class \code{intensity_surface}.
 #' @author Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
 #'  sigmas = list(.02*diag(2), .05*diag(2),.01*diag(2)))
 #' intsurf=to_int_surf(truemix, lambda = 100, win = spatstat::square(1))
@@ -390,7 +423,7 @@ to_int_surf <- function(mix, lambda = NULL, win = NULL,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #CompareSurfs}
 #'
 #' @param surf1,surf2 Either IPPP intensity surfaces (objects of type \code{intensity_surface})
@@ -424,8 +457,7 @@ to_int_surf <- function(mix, lambda = NULL, win = NULL,
 #' \code{\link{plot_avgsurf}},
 #' \code{\link{GetBMA}},
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' #compare two surfaces first
 #' mixsurf1 = rmixsurf(m = 5, sig0 = .1, df = 5,xlim= c(-1,4), ylim = c(-2,1), rand_m = FALSE)
 #' mixsurf2 = rmixsurf(m = 8, sig0 = .1, df = 5,xlim= c(-4,3), ylim = c(-1,2), rand_m = FALSE)
@@ -540,14 +572,13 @@ CompareSurfs<-function(surf1,surf2,LL = 100,
   alldist[2]=max(abs(mat))
   cat("2) Maximum Absolute Pixel distance:",
       alldist[2],"\n")
-#  if(require(matrixcalc))
-  alldist[3]=matrixcalc::frobenius.norm(mat)
+  alldist[3]=MatrixNorm(mat,2.0)
   cat("3) Frobenius norm of the matrix of Pixel distances:",
       alldist[3],"\n")
   alldist[4]=mean(logmat^2)
   cat("4) Average Squared Log Pixel distance:",
       alldist[4],"\n")
-  alldist[5]=matrixcalc::frobenius.norm(logmat)
+  alldist[5]=MatrixNorm(logmat,2.0)
   cat("5) Frobenius norm of the matrix of Log Pixel distances:",
       alldist[5],"\n")
   cat("Window used: [",xlim[1],",",xlim[2],
@@ -563,7 +594,7 @@ CompareSurfs<-function(surf1,surf2,LL = 100,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Count_pts}
 #'
 #' @param pp Object of class \code{sppmix} or \code{\link[spatstat]{ppp}}.
@@ -577,8 +608,7 @@ CompareSurfs<-function(surf1,surf2,LL = 100,
 #' @return An integer representing the number of points from \code{pp} within the window \code{win}.
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf=rmixsurf(m = 3,lambda=100, xlim=c(-5,5),ylim=c(-5,5))
 #' genPP=rsppmix(truemix_surf)
 #' plotmix_2d(truemix_surf,genPP)
@@ -608,13 +638,12 @@ Count_pts <- function(pp,win)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #demo_mix}
 #'
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' demo_mix <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)),
 #'  sigmas = list(.01*diag(2), .01*diag(2)))
 #' demo_intsurf <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2),

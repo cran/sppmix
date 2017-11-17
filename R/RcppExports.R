@@ -21,8 +21,32 @@ BDMCMC2d_sppmix <- function(maxnumcomp, points, xlims, ylims, L, truncate, lamda
     .Call('sppmix_BDMCMC2d_sppmix', PACKAGE = 'sppmix', maxnumcomp, points, xlims, ylims, L, truncate, lamda, lamdab, hyper)
 }
 
-DAMCMC2d_sppmix <- function(points, xlims, ylims, m, L, truncate, hyperparams) {
-    .Call('sppmix_DAMCMC2d_sppmix', PACKAGE = 'sppmix', points, xlims, ylims, m, L, truncate, hyperparams)
+DAMCMC2d_sppmix <- function(points, xlims, ylims, m, L, truncate, hyperparams, useKmeans) {
+    .Call('sppmix_DAMCMC2d_sppmix', PACKAGE = 'sppmix', points, xlims, ylims, m, L, truncate, hyperparams, useKmeans)
+}
+
+DAMCMC2dRMCP_sppmix <- function(points, xlims, ylims, m, L, truncate, d, mu0, Sigma0, df0, sig0, useKmeans, startmus) {
+    .Call('sppmix_DAMCMC2dRMCP_sppmix', PACKAGE = 'sppmix', points, xlims, ylims, m, L, truncate, d, mu0, Sigma0, df0, sig0, useKmeans, startmus)
+}
+
+TriangleArea <- function(a, b, c) {
+    .Call('sppmix_TriangleArea', PACKAGE = 'sppmix', a, b, c)
+}
+
+CheckTriangleCLockwise <- function(a, b, c) {
+    .Call('sppmix_CheckTriangleCLockwise', PACKAGE = 'sppmix', a, b, c)
+}
+
+CheckInPoly <- function(poly, xy) {
+    .Call('sppmix_CheckInPoly', PACKAGE = 'sppmix', poly, xy)
+}
+
+MatrixNorm <- function(M, p) {
+    .Call('sppmix_MatrixNorm', PACKAGE = 'sppmix', M, p)
+}
+
+MatTrace <- function(M) {
+    .Call('sppmix_MatTrace', PACKAGE = 'sppmix', M)
 }
 
 Quad_sppmix <- function(v, m) {
@@ -133,6 +157,14 @@ dNormal_sppmix <- function(atx, mu, sig) {
     .Call('sppmix_dNormal_sppmix', PACKAGE = 'sppmix', atx, mu, sig)
 }
 
+MultGamma <- function(p, n) {
+    .Call('sppmix_MultGamma', PACKAGE = 'sppmix', p, n)
+}
+
+dInvWishart_sppmix <- function(W, df, alpha) {
+    .Call('sppmix_dInvWishart_sppmix', PACKAGE = 'sppmix', W, df, alpha)
+}
+
 MIPPCondLoc_sppmix <- function(points, marks, xlims, ylims, L, truncate, hyperparams, uniquemarks, discrete_mark, r) {
     .Call('sppmix_MIPPCondLoc_sppmix', PACKAGE = 'sppmix', points, marks, xlims, ylims, L, truncate, hyperparams, uniquemarks, discrete_mark, r)
 }
@@ -147,6 +179,10 @@ GenMarksProbCondLoc_sppmix <- function(points, L, xlims, ylims, meangamma, uniqu
 
 GetProbCondLoc_sppmix <- function(points, origmarks, xlims, ylims, meangamma, uniquemarks, truncate, r) {
     .Call('sppmix_GetProbCondLoc_sppmix', PACKAGE = 'sppmix', points, origmarks, xlims, ylims, meangamma, uniquemarks, truncate, r)
+}
+
+GetPriorVals_sppmix <- function(pp, allgens, priortype, d, mu0, Sigma0, df0, sig0) {
+    .Call('sppmix_GetPriorVals_sppmix', PACKAGE = 'sppmix', pp, allgens, priortype, d, mu0, Sigma0, df0, sig0)
 }
 
 GetStats_sppmix <- function(gens, alpha) {

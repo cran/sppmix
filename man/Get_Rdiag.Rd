@@ -39,24 +39,22 @@ a longer number of iterations to get convergence.
 
 For DAMCMC examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Get_Rdiag}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 plot(truemix_surf)
 genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
 Get_Rdiag(pp = genPPP, m = 3)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_damcmc}},
 \code{\link{rmixsurf}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

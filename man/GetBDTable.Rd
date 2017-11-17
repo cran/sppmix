@@ -24,20 +24,18 @@ number of components, based on a BDMCMC fit from \code{\link{est_mix_bdmcmc}}.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetBDTable}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_bdmcmc(pp = spatstat::redwood, m = 7)
 GetBDTable(fit)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_bdmcmc}}
 }
-
+\author{
+Sakis Micheas
+}

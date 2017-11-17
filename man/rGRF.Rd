@@ -52,7 +52,7 @@ Matern's model.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #rGRF}
 }
 \details{
@@ -72,8 +72,7 @@ domain of observation using wider \code{xlims}
 and \code{ylims}.
 }
 \examples{
-
-\dontrun{
+\donttest{
 #Gaussian random field as an image
 GRF1=rGRF()
 p<-plot_density(as.data.frame(GRF1))
@@ -95,13 +94,12 @@ p+add_title("Log-Gaussian random field with Matern model covariances", mu=0,thet
  nu=.5,sigma=1)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{MaternCov}},
 \code{\link{plot_density}},
 \code{\link[ggplot2]{ggtitle}},
 \code{\link{add_title}}
 }
-
+\author{
+Sakis Micheas
+}

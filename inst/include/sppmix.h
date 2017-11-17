@@ -21,8 +21,20 @@ List DAMCMC2d_sppmix(mat const& data,
                      vec const& ylims,
                      int const& m,int const& L,
                      bool const& truncate,
-                     vec const& hyperparams);
-
+                     vec const& hyperparams,
+                     bool const& useKmeans);
+List DAMCMC2dRMCP_sppmix(
+    mat const& points,
+    vec const& xlims,
+    vec const& ylims,
+    int const& m,int const& L,
+    bool const& truncate,
+    vec const& d,vec const& mu0,
+    mat const& Sigma0,
+    int const& df0,
+    double const& sig0,
+    bool const& useKmeans,
+    mat const& startmus);
 //Marked IPPP conditional on location
 //file: MIPPCondLoc_sppmix.cpp
 List MIPPCondLoc_sppmix(mat const& points,
@@ -103,6 +115,13 @@ double ApproxNormCdf2d_sppmix(vec const& uplim,
 
 //Operations on posterior realizations
 //file: OpsPostGens_sppmix.cpp
+vec GetPriorVals_sppmix(mat const& pp,
+    List const& allgens,
+    int const& priortype,
+    vec const& d,vec const& mu0,
+    mat const& Sigma0,
+    int const& df0,
+    double const& sig0);
 List GetStats_sppmix(vec const& gens,double const& alpha);
 mat GetAllRealiz_ps_sppmix(List const& allgens);
 List GetAllRealiz_mus_sppmix(List const& allgens);
@@ -130,6 +149,16 @@ double ComputeBayesFactor_sppmix(mat const& densvals1,mat const& densvals2);
 
 //Helper functions
 //file: HelperFuncs_sppmix.cpp
+double MatTrace(mat const& M);
+int CheckTriangleCLockwise(vec const& a,
+                           vec const& b,
+                           vec const& c);
+double TriangleArea(vec const& a,
+                    vec const& b,
+                    vec const& c);
+bool CheckInPoly(mat const& poly,
+                 vec const& x);
+double MatrixNorm(mat const& M,double const& p);
 double VecLen2(vec const& v);
 double VecNorm2(vec const& v);
 double SQ_sppmix(double const& x);
@@ -164,5 +193,10 @@ double dNormal1d_sppmix(double const& atx,double const& mu,double const& sigsq);
 double ApproxBivNormProb_sppmix(vec const& xlims,
   vec const& ylims,vec const& mu,
   mat const& sigma,int type);
+double MultGamma(int const& p,
+                 int const& n);
+double dInvWishart_sppmix(
+    mat const& W,double const& df,
+    mat const& alpha);
 
 #endif

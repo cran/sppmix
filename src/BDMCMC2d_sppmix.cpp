@@ -627,6 +627,7 @@ List BDMCMC2d_sppmix(int const& maxnumcomp,
           //break;
       }//*/
     }
+    Rcpp::checkUserInterrupt();
   }
   Rprintf("\rDone                                                      \n");
 //  Rprintf("\rMH acceptance %3.1f%%",100.0*MHjump/L);

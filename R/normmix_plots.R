@@ -5,7 +5,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot.intensity_surface}
 #'
 #' @param x Object of class \code{intensity_surface} or \code{normmix}.
@@ -24,8 +24,7 @@
 #' @seealso \code{\link{normmix}},
 #' \code{\link{to_int_surf}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-1, 5), ylim =c(2, 5))
 #' intsurf=to_int_surf(truemix, lambda = 200, win =spatstat::owin( c(-1, 5),c(2, 5)))
 #' plot(intsurf,main = "True Poisson intensity surface (mixture of normal components)")
@@ -117,7 +116,7 @@ plot.intensity_surface <- function(x, truncate = TRUE, L = 256,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot.sppmix}
 #'
 #' @param x A point pattern of class \code{\link{sppmix}} or
@@ -134,7 +133,8 @@ plot.intensity_surface <- function(x, truncate = TRUE, L = 256,
 #' on which component they belong to.
 #' @param showmarks Logical flag requesting
 #' to plot each point with a different circle size
-#' according to its mark value.
+#' according to its mark value. If the mark is a data.frame object (multivariate marks), the first column (mark) is used as the the marks and displayed.
+#' @param whichmark If multivariate marks, choose to display this one.
 #' @param ... Additional parameters to the \code{add_title} function. Valid choices
 #' are m, n and L. To add a different title than the default, use \code{add_title} after the plot call (see examples below).
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
@@ -146,8 +146,7 @@ plot.intensity_surface <- function(x, truncate = TRUE, L = 256,
 #' \code{\link{GetMAPLabels}},
 #' \code{\link{rMIPPP_cond_mark}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' mix1 <- rnormmix(5, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 #' intsurf1=to_int_surf(mix1, lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
 #' pp1 <- rsppmix(intsurf1)
@@ -161,7 +160,7 @@ plot.intensity_surface <- function(x, truncate = TRUE, L = 256,
 #'  m=intsurf1$m,n=pp1$n)
 #' #use the demo intensity surface
 #' demo_intsurf
-#' pp2 <- rsppmix(demo_intsurf)
+#' pp2 <- rsppmix(demo_intsurf,marks = 1:3)
 #' plot(pp2)
 #' plot(pp2, mus = demo_intsurf$mus)#plot the mixture means as well
 #' #plot the points with different colors depending on the true component label
@@ -177,10 +176,18 @@ plot.intensity_surface <- function(x, truncate = TRUE, L = 256,
 #' @export
 #' @method plot sppmix
 plot.sppmix <- function(x, mus, estcomp,
-      open_new_window=FALSE, colors = FALSE,showmarks=FALSE, ...)
+      open_new_window=FALSE, colors = FALSE,showmarks=TRUE,whichmark=1, ...)
 {
-  y=NULL
   pattern<-x
+  if(pattern$markformat=="none")
+    showmarks=FALSE
+  else
+  {
+    if(class(pattern$marks)=="data.frame")
+      pattern$marks=pattern$marks[,whichmark]
+  }
+
+  y=NULL
   n <- pattern$n
   openwin_sppmix(check2open=open_new_window)
   if (colors == TRUE) {
@@ -226,10 +233,9 @@ plot.sppmix <- function(x, mus, estcomp,
 #    ggplot2::limits(pattern$window$xrange,"x")+
 #    ggplot2::limits(pattern$window$yrange,"y")+
     add_title("Point pattern from a Poisson with mixture intensity", n = pattern$n, ...)
-}
+  }
 
   if(showmarks)
-    if(!is.null(pattern$marks))
       p<-p+geom_point(data=as.data.frame(pattern),aes(x=x,y=y,size=marks),shape=21)+
     scale_size_continuous(breaks=sort(unique(pattern$marks)))+
     guides(size =guide_legend(title="Mark",ncol=2,byrow=TRUE))
@@ -251,7 +257,7 @@ plot.sppmix <- function(x, mus, estcomp,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot2dPP}
 #'
 #' @param pp A point pattern of class sppmix or
@@ -266,8 +272,7 @@ plot.sppmix <- function(x, mus, estcomp,
 #' \code{\link[spatstat]{owin}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' mix1 <- rnormmix(5, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 #' intsurf1=to_int_surf(mix1, lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
 #' pp1 <- rsppmix(intsurf1)
@@ -318,7 +323,7 @@ plot2dPP <- function(pp, mus,add2plot=FALSE,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plotmix_2d}
 #'
 #' @inheritParams rsppmix
@@ -350,8 +355,7 @@ plot2dPP <- function(pp, mus,add2plot=FALSE,
 #' \code{\link{PlotUSAStates}}
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # plot normmix density
 #' truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 #' summary(truemix)
@@ -418,7 +422,7 @@ plotmix_2d <- function(intsurf, pattern,estcomp, contour = FALSE, truncate = TRU
     p<-p + ggplot2::geom_raster(aes(fill = value), interpolate = TRUE) +
       ggplot2::scale_fill_gradientn(colors = cols) +
       ggplot2::guides(
-        fill = guide_colorbar(title = "Elevation",nbin = 100,
+        fill = guide_colorbar(title = "Intensity",nbin = 100,
           barheight = 15))+
       ggplot2::coord_cartesian(xlim =xrange,
                                ylim =yrange,expand=FALSE)
@@ -510,7 +514,7 @@ plotmix_2d <- function(intsurf, pattern,estcomp, contour = FALSE, truncate = TRU
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot.normmix}
 #'
 #' @param x Object of class \code{normmix}.
@@ -533,8 +537,7 @@ plotmix_2d <- function(intsurf, pattern,estcomp, contour = FALSE, truncate = TRU
 #' \code{\link[spatstat]{owin}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # plot normmix density
 #' truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(-1, 2), ylim = c(-1, 2))
 #' summary(truemix)
@@ -599,7 +602,7 @@ plot.normmix <- function(x, xlim, ylim, contour = FALSE,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_density}
 #'
 #' @param density_df A data frame. Typically density_df=as.data.frame(imdens), where imdens an \code{\link[spatstat]{im}} object.
@@ -608,12 +611,12 @@ plot.normmix <- function(x, xlim, ylim, contour = FALSE,
 #' @param main A title for the 2d plot.
 #' @param pp Optional point pattern to display (a \code{\link[spatstat]{ppp}} or \code{sppmix} object).
 #' @param surf Optional \code{intensity_surface} object containing means to be displayed in the plot.
+#' @param ppsize Size of the points in the plot.
 #' @details This function does not open a new window for the plot.
 #' @seealso \code{\link{dnormmix}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # plot a mixture of normals density
 #' truemix <- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 #' summary(truemix)
@@ -626,7 +629,7 @@ plot.normmix <- function(x, xlim, ylim, contour = FALSE,
 #' @export
 plot_density <- function(density_df,
   contour = FALSE, grayscale = FALSE,
-  pp=NULL,surf=NULL,
+  pp=NULL,surf=NULL,ppsize=1.0,
   main="2d surface (density or intensity)")
 {
   x=y=value=..level..=NULL
@@ -649,7 +652,7 @@ plot_density <- function(density_df,
     p<-p + ggplot2::geom_raster(aes(fill = value), interpolate = TRUE) +
       ggplot2::scale_fill_gradientn(colors = color) +
       ggplot2::guides(fill = guide_colorbar(
-        title = "Elevation",nbin = 100, barheight = 15))+
+        title = "Intensity",nbin = 100, barheight = 15))+
       ggplot2::coord_cartesian(xlim =xrange,
                                ylim =yrange,expand=FALSE)
   } else {
@@ -665,7 +668,7 @@ plot_density <- function(density_df,
     #show the point pattern points
     pp_df <- data.frame(pp$x,pp$y)
     names(pp_df) <- c("x", "y")
-    p<-p + ggplot2::geom_point(data = pp_df,size=0.8)
+    p<-p + ggplot2::geom_point(data = pp_df,size=ppsize)
   }
   if(!is.null(surf))
   {
@@ -685,26 +688,25 @@ plot_density <- function(density_df,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html#add_title}
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html#add_title}
 #'
 #' @param title The title to use for the plot.
-#' @param lambda,m,n,L,nmarks,mu,theta,nu,gamma,sigma,df Optional info
+#' @param lambda,m,n,t,L,nmarks,mu,theta,nu,gamma,sigma,df Optional info
 #' to display on the second row of
 #' the title: average number of points,
 #' number of components in the mixture,
 #' number of points in the point pattern,
-#' number of iterations, total number
+#' time frame, number of iterations, total number
 #' of marks, a mean value, parameters
 #' for a Matern covariance model, a parameter gamma, and
 #' degrees of freedom, respectively.
 #'
-#' @author Yuchen Wang, Sakis Micheas
+#' @author Sakis Micheas, Yuchen Wang
 #' @seealso \code{\link{rnormmix}},
 #' \code{\link{dnormmix}},
 #' \code{\link{MaternCov}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix = rnormmix(m = 5, sig0 = .1, df = 5,xlim= c(0, 3), ylim = c(0, 3))
 #' intsurf=to_int_surf(truemix,lambda = 100,win=spatstat::owin( c(0, 5),c(0, 5)))
 #' #plot the intensity surface
@@ -712,12 +714,13 @@ plot_density <- function(density_df,
 #'
 #' @export
 add_title <- function(title, lambda = "",
-  m = "", n = "", L = "",nmarks="",
+  m = "", n = "", t="", L = "",nmarks="",
   mu="",theta="",nu="",gamma="",sigma="",df="")
 {
   if (!missing(lambda)) lambda <- bquote(paste(lambda == .(lambda)))
   if (!missing(m)) m <- bquote(paste(m == .(m), " components"))
   if (!missing(n)) n <- bquote(paste(n == .(n), " points"))
+  if (!missing(t)) t <- bquote(paste("time ",.(t)))
   if (!missing(L)) L <- bquote(paste(L == .(L), " iterations"))
   if (!missing(nmarks)) nmarks <- bquote(paste(.(nmarks)," marks"))
   if (!missing(mu)) mu <- bquote(mu == .(mu))
@@ -727,7 +730,7 @@ add_title <- function(title, lambda = "",
   if (!missing(gamma)) gamma <- bquote(gamma == .(gamma))
   if (!missing(df)) df <- bquote(paste(.(df)," degrees of freedom"))
 
-  all_char <- list(lambda = lambda, m = m, n = n, L = L,nmarks=nmarks,
+  all_char <- list(lambda = lambda, m = m, n = n, t=t, L = L,nmarks=nmarks,
                    mu =mu,theta=theta,nu=nu,gamma=gamma,sigma=sigma,df=df)
   non_empty_char <- all_char[nchar(all_char) > 0]
 
@@ -749,7 +752,7 @@ add_title <- function(title, lambda = "",
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plotmix_3d}
 #'
 #' @param dens_image An image as an object of class \code{\link[spatstat]{im}}.
@@ -761,8 +764,7 @@ add_title <- function(title, lambda = "",
 #' @seealso \code{\link{rnormmix}},
 #' \code{\link{dnormmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(0, 3), ylim = c(0, 3))
 #' normdens=dnormmix(truemix, xlim= c(0, 3), ylim = c(0, 3))
 #' plotmix_3d(normdens)
@@ -855,7 +857,7 @@ plotmix_3d<-function(dens_image,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_true_labels}
 #'
 #' @param pattern Object of class \code{sppmix}.
@@ -867,8 +869,7 @@ plotmix_3d<-function(dens_image,
 #' \code{\link{rsppmix}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-3, 3), ylim = c(-3, 3))
 #' intsurf=to_int_surf(truemix, lambda = 100, win =spatstat::owin( c(-3, 3),c(-3, 3)))
 #' pp1 <- rsppmix(intsurf,FALSE)

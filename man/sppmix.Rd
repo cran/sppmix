@@ -4,6 +4,7 @@
 \name{sppmix}
 \alias{sppmix}
 \alias{sppmix-package}
+\alias{sppmix-package}
 \title{sppmix: Poisson point process modeling using normal mixture models for the intensity surface}
 \description{
 This help page contains a summary of the features of
@@ -12,7 +13,7 @@ the R package \code{sppmix}.
 The main page for the package is
 at
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/index.html}
+\url{http://faculty.missouri.edu/~micheasa/sppmix/index.html}
 
 including the package vignettes and R code with examples for each
 function of the package.
@@ -108,20 +109,14 @@ to obtain additional information. See
 \section{External dependencies}{
 
 We link and require several R packages, including
-\code{\link[spatstat]{spatstat}}, \code{\link[sp]{sp}},
-\code{\link[USAboundaries]{USAboundaries}}, \code{\link[rgl]{rgl}},
-\code{ggplot2}, \code{matrixcalc},
+\code{\link[spatstat]{spatstat}}, \code{\link[rgl]{rgl}},
+\code{ggplot2},
 \code{\link[Rcpp]{Rcpp}}, \code{\link[RcppArmadillo]{RcppArmadillo}}, \code{\link[fields]{fields}},
 and \code{mvtnorm}.
 
 In particular, we utilize the \code{\link[spatstat]{ppp}} and \code{\link[spatstat]{owin}} classes
 from the \code{\link[spatstat]{spatstat}} package in order to
 describe a point pattern.
-
-The packages \code{\link[sp]{sp}} and
-\code{\link[USAboundaries]{USAboundaries}} are used
-for applications and illustrations involving
-geostatistical data and map plotting of specific states or counties in the USA.
 
 The MCMC algorithms are implemented in C++ using
 \code{\link[Rcpp]{Rcpp}} and \code{\link[RcppArmadillo]{RcppArmadillo}}, and were
@@ -151,14 +146,10 @@ feel free to contact the package maintainer Sakis Micheas.
 All code in this package is copyright Sakis Micheas and Jiaxun Chen
 and is released under the MIT license (\url{https://cran.r-project.org/web/licenses/MIT}).
 
-Furthermore, a lot of our examples utilize the \code{USAboundaries} package.
-The historical data provided in this package is available under the
-\code{CC BY-NC-SA 2.5} license from John H. Long, et al., Atlas of Historical
-County Boundaries, Dr. William M. Scholl Center for American History and
-Culture, The Newberry Library, Chicago (2010).
-We have therefore used the \code{CC BY-NC-SA 4.0} license for the \code{sppmix}
-package. More information on this license can be found here:
-\url{http://creativecommons.org/licenses/by-nc-sa/4.0/}.
+Furthermore, a lot of our examples utilize the \code{\link{PlotUSAStates}} function
+which requires the Cartographic Boundary Shapefiles (boundary data) provided by the
+USA Census Bureau at \url{https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html}.
+To our knowledge there is no special license required to use this data.
 
 If you use the \code{sppmix} package in your research, we would appreciate a citation.
 }
@@ -170,19 +161,9 @@ please use:
 
 Micheas, A., and Chen, J. (2017): sppmix-Modeling spatial
 Poisson and related point processes using normal mixture
-models. R package version 1.0.0.0.
-Package website: \url{http://www.stat.missouri.edu/~amicheas/sppmix/index.html}.
+models. R package. Package website: \url{http://faculty.missouri.edu/~micheasa/sppmix/index.html}.
 }
-\author{
-Jiaxun Chen (Author and Creator)
-\email{chenjiaxun9@hotmail.com}.
 
-Athanasios (Sakis) Christou Micheas (Author and Maintainer)
-\email{micheasa@missouri.edu}
-
-Significant contributions on the package skeleton creation, plotting functions and other code by
-Yuchen Wang \email{ycwang0712@gmail.com}
-}
 \references{
 Diebolt, J., and Robert, C. P. (1994). Estimation of
 Finite Mixture Distributions through Bayesian Sampling.
@@ -202,7 +183,7 @@ Chakraborty, A., and Gelfand, A.E. (2010). Measurement error in spatial point pa
 
 Gelfand, A.E., Diggle, P.J., Fuentes, M. and Guttorp, P., editors (2010) Handbook of Spatial Statistics. CRC Press.
 
-Diggle, P.J. (2014) Statistical Analysis of Spatial and Spatio-Temporal Point Patterns, Third edition. Chapman and Hall/CRC.
+Diggle, P.J. (2013) Statistical Analysis of Spatial and Spatio-Temporal Point Patterns, Third edition. Chapman and Hall/CRC.
 
 Micheas, A. C. (2014). Hierarchical Bayesian Modeling of Marked Non-Homogeneous Poisson Processes with finite mixtures and inclusion of covariate information. Journal of Applied Statistics, 41, 12, 2596-2615.
 
@@ -210,4 +191,13 @@ Zhou, Z., Matteson, D.S., Woodard, D.B., Henderson, S.G., and Micheas, A.C. (201
 
 Baddeley, A., Rubak, E. and Turner, R. (2015) Spatial Point Patterns: Methodology and Applications with R. Chapman and Hall/CRC Press.
 }
+\author{
+Jiaxun Chen (Author and Creator)
+\email{chenjiaxun9@hotmail.com}.
 
+Athanasios (Sakis) Christou Micheas (Author and Maintainer)
+\email{micheasa@missouri.edu}
+
+Significant contributions on the package skeleton creation, plotting functions and other code by
+Yuchen Wang \email{ycwang0712@gmail.com}
+}

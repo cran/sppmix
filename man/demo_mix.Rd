@@ -2,13 +2,13 @@
 % Please edit documentation in R/normmix.R
 \docType{data}
 \name{demo_mix}
-\alias{demo_genPPP}
-\alias{demo_intsurf}
-\alias{demo_intsurf3comp}
 \alias{demo_mix}
+\alias{demo_intsurf}
+\alias{demo_genPPP}
 \alias{demo_truemix3}
 \alias{demo_truemix3comp}
 \alias{demo_truesurf3}
+\alias{demo_intsurf3comp}
 \title{Demo objects}
 \format{An object of class \code{normmix} of length 5.}
 \usage{
@@ -32,12 +32,11 @@ using the classes provided by the \code{\link{sppmix}} package.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #demo_mix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 demo_mix <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)),
  sigmas = list(.01*diag(2), .01*diag(2)))
 demo_intsurf <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2),
@@ -50,4 +49,3 @@ demo_genPPP<-rsppmix(demo_truesurf3, truncate=FALSE)}
 Jiaxun Chen, Sakis Micheas, Yuchen Wang
 }
 \keyword{datasets}
-

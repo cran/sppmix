@@ -5,6 +5,39 @@
 //L=num iter
 //just get realizations no plotting here
 
+mat GetNeighborMarks(
+    mat const& data,
+    vec const& marks,
+    double const& r,
+    vec const& uniquemarks,
+    int const& marknum)
+{
+  int i,j,k,n=data.n_rows;
+  mat neighbors=zeros(marknum,n);
+  for(i=0;i<n;i++)
+  {
+    //count neighbors
+    double summark=0;
+    int ncount=0;
+    for(j=0;j<n;j++)
+    {
+//      if(i==j)continue;
+      double dist1=VecLen2(
+        trans(data.row(j)-data.row(i)));
+      if(dist1<=r)
+      {
+        ncount++;
+        summark+=marks(j);
+      }
+    }
+    for(k=0;k<marknum;k++)
+      neighbors(k,i)=
+        SQ_sppmix(uniquemarks(k)-
+        summark/ncount);
+  }
+  return(neighbors);
+}
+
 //[[Rcpp::export]]
 List MIPPCondLoc_sppmix(mat const& points,
                         vec const& marks,
@@ -19,7 +52,7 @@ List MIPPCondLoc_sppmix(mat const& points,
 {
   List checkin=CheckInWindow_sppmix(points,xlims,ylims,truncate);
   mat data=as<mat>(checkin["data_inW"]);
-  int i,j,k,n=data.n_rows;
+  int i,j,k,m,n=data.n_rows;
   Rcout << "\nDataset has " << n <<" points" << std::endl ;
 
   //find neighborhoods
@@ -27,49 +60,69 @@ List MIPPCondLoc_sppmix(mat const& points,
   mat gen_gammas=zeros(L,marknum),
     iden=arma::eye(marknum,marknum),
     neighbors=zeros(marknum,n);
-
-  for(i=0;i<n;i++)
-  {
-    //count neighbors
-    double summark=0;
-    int ncount=0;
-    for(j=0;j<n;j++)
-    {
-      double dist1=VecLen2(
-        trans(data.row(j)-data.row(i)));
-      if(dist1<=r)
-      {
-        ncount++;
-        summark+=marks(j);
-      }
-    }
-    for(k=0;k<marknum;k++)
-      neighbors(k,i)=
-        SQ_sppmix(uniquemarks(k)-
-        summark/ncount);
-  }
-
-//hyperparams[0] is the std
-  double MHjump=0,sigma0=hyperparams[0];
+  neighbors=GetNeighborMarks(data,marks,
+                   r,uniquemarks,marknum);
+  //hyperparams[0] is the std
+  double MHjump=0,
+    sigma0=hyperparams[0];
 //  vec mu0=zeros(2);
 //  mat sigma0=hyperparams[0]*arma::eye(marknum,marknum);
-  vec v1//(marknum);
-    =hyperparams[0]*arma::randn(marknum);
-  //arma::randg(marknum,distr_param(10,10));
-//  for (i=0;i<marknum;i++)v1(i)=accu(neighbors.row(i))/n;
+  vec v1=hyperparams.subvec(1,marknum);
+//  Rcout<<"start value="<<v1<<"\n";
   gen_gammas.row(0)=v1.t();
   //norm(marknum,mu0,sigma0);
   // start the main loop
   for (i=0;i<L-1;i++)
   {
-    Rprintf("\rWorking: %3.1f%% complete",100.0*i/(L-2));
-    v1=gen_gammas.row(i).t()+sigma0*arma::randn(marknum);
-    gen_gammas.row(i+1)=v1.t();
+    Rcout<<"\rWorking: "<<100.0*(i+1)/L<<"% complete          ";
+    //    Rprintf("\rWorking: %3.1f%% complete",100.0*i/(L-2));
+    gen_gammas.row(i+1)=gen_gammas.row(i);
+    //individual updates
+    for(m=0;m<marknum;m++)
+    {
+      double numer,denumer,prod1=1,
+        ratio=1,totcur,totprop,
+        prodcur=1,prodprop=1;
+      gen_gammas(i+1,m)=gen_gammas(i,m)+sigma0*arma::randn(1)[0];
+      for(k=0;k<n;k++)
+      {
+        totcur=totprop=0;
+        for(j=0;j<marknum;j++)
+        {
+          totcur+=exp(-gen_gammas(i,j)*neighbors(j,k));
+          totprop+=exp(-gen_gammas(i+1,j)*neighbors(j,k));
+        }
+        for(j=0;j<marknum;j++)
+          if(marks(k)==uniquemarks(j))
+          {
+            prodcur*=exp(-gen_gammas(i,j)*neighbors(j,k))/totcur;
+            prodprop*=exp(-gen_gammas(i+1,j)*neighbors(j,k))/totprop;
+            break;
+          }
+      }
+//      numer=exp(-(.5/sigma0)*VecNorm2(gen_gammas.row(i+1).t()));
+//      denumer=exp(-(.5/sigma0)*VecNorm2(gen_gammas.row(i).t()));
+      numer=exp(-(.5/1)*SQ_sppmix(gen_gammas(i+1,m)));
+      denumer=exp(-(.5/1)*SQ_sppmix(gen_gammas(i,m)));
+      prod1=numer/denumer;
+      ratio=prod1*prodprop/prodcur;
+      if (Rcpp::runif(1)[0]<ratio)
+        MHjump=MHjump+1;
+      else
+        gen_gammas(i+1,m)=gen_gammas(i,m);
+    }
+//block update
+/*
     double numer,denumer,prod1=1,
       ratio=1,totcur,totprop,
-      prodcur=1,prodprop=1;
+  //    prodcur=1,prodprop=1,prods=1,
+      logsum=0;
+    v1=gen_gammas.row(i).t()+sigma0*arma::randn(marknum);
+    gen_gammas.row(i+1)=v1.t();
     for(k=0;k<n;k++)
     {
+//      Rcout<<"neighbors k="<<k
+//           <<"\n"<<neighbors.col(k);
       totcur=totprop=0;
       for(j=0;j<marknum;j++)
       {
@@ -79,22 +132,31 @@ List MIPPCondLoc_sppmix(mat const& points,
       for(j=0;j<marknum;j++)
         if(marks(k)==uniquemarks(j))
         {
-          prodcur*=exp(-gen_gammas(i,j)*neighbors(j,k))/totcur;
-          prodprop*=exp(-gen_gammas(i+1,j)*neighbors(j,k))/totprop;
+//          prodcur*=exp(-gen_gammas(i,j)*neighbors(j,k))/totcur;
+  //        prodprop*=exp(-gen_gammas(i+1,j)*neighbors(j,k))/totprop;
+//prods*=totcur*exp((-gen_gammas(i+1,j)+gen_gammas(i,j))*neighbors(j,k))/totprop;//prodprop/prodcur
+          logsum+=totcur-totprop+(-gen_gammas(i+1,j)+gen_gammas(i,j))*neighbors(j,k);
           break;
         }
     }
-    numer=exp(-(.5/sigma0)*VecNorm2(gen_gammas.row(i+1).t()));
-    denumer=exp(-(.5/sigma0)*VecNorm2(gen_gammas.row(i).t()));
+//    Rcout<<"prods="<<prods<<"\n";
+    numer=exp(-(.5/(sigma0))*VecNorm2(gen_gammas.row(i+1).t()));
+    denumer=exp(-(.5/(sigma0))*VecNorm2(gen_gammas.row(i).t()));
     prod1=numer/denumer;
-    ratio=prod1*prodprop/prodcur;
+//    Rcout//<<"prod1="<<prod1<<"\n"
+//         <<"prodprop/prodcur="<<prodprop/prodcur<<"\n";
+    ratio=prod1*exp(logsum);//prods;//prodprop/prodcur;
     if (Rcpp::runif(1)[0]<ratio)
       MHjump=MHjump+1;
     else
       gen_gammas.row(i+1)=gen_gammas.row(i);
+*/
+    Rcpp::checkUserInterrupt();
   }
-  Rprintf("\rDone. Metropolis-Hastings acceptance: %3.1f%%                 \n",100.0*MHjump/L);
+  Rprintf("\rDone. Metropolis-Hastings acceptance: %3.1f%%                 \n",100.0*MHjump/(marknum*L));
 
+//  for (i=0;i<L;i++)
+//    gen_gammas.row(i)=arma::sort(gen_gammas.row(i).t()).t();
   return List::create(
     Named("gen_gammas") = gen_gammas,
  //   Named("prob_field") = ps_fields,
@@ -253,6 +315,7 @@ List GenMarksProbCondLoc_sppmix(
           summark/ncount))/sum1;
       marks(i)=rDiscrete_sppmix(1,probs.row(i).t());
     }
+    Rcpp::checkUserInterrupt();
   }
   Rprintf("\rDone.                                          ");
   return  List::create(

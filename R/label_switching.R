@@ -9,7 +9,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #FixLS_da}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -38,8 +38,7 @@
 #' \code{\link{plot_chains}},
 #' \code{\link{check_labels}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate data
 #' mix1 <- normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
 #'  sigmas = list(.02*diag(2),.05*diag(2), .02*diag(2)),lambda = 100, win = spatstat::square(1))
@@ -105,7 +104,7 @@ FixLS_da<- function(fit, burnin = floor(fit$L / 10),
         cat("\nIteration",iter,", lag=",lagnum,"\n")
       iter=iter+1
       lagnum=lagstart+iter*10
-      permgens <- PostGenGetBestPermIdenConstraint_sppmix(fit)
+      permgens = PostGenGetBestPermIdenConstraint_sppmix(fit)
       fit$allgens_List = permgens$allgens_List
       fit$genps = permgens$genps
       fit$genmus = permgens$genmus
@@ -126,7 +125,7 @@ FixLS_da<- function(fit, burnin = floor(fit$L / 10),
         cat("\nIteration",iter,", lag=",lagnum,"\n")
       iter=iter+1
       lagnum=lagstart+iter*10
-      permgens <- PostGenGetBestPerm_sppmix(fit$allgens_List)
+      permgens = PostGenGetBestPerm_sppmix(fit$allgens_List)
       fit$allgens_List = permgens$permuted_gens
       fit$genps = permgens$permuted_ps
       fit$genmus = permgens$permuted_mus
@@ -178,7 +177,7 @@ FixLS_da<- function(fit, burnin = floor(fit$L / 10),
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #check_labels}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -214,8 +213,7 @@ FixLS_da<- function(fit, burnin = floor(fit$L / 10),
 #' is an average on surfaces based on each of the posterior realizations, and as such
 #' does not suffer from the label switching problem.
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate data
 #' mix1 = normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
 #'  sigmas = list(.02*diag(2),.05*diag(2), .02*diag(2)),lambda = 100,

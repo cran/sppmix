@@ -33,12 +33,11 @@ to calculate the posterior intensity surface.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetPMEst}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_damcmc(pp = spatstat::redwood, m = 3)
 post_intsurf <- GetPMEst(fit, burnin = 1000)
 plot(post_intsurf)
@@ -49,10 +48,9 @@ post_fixed = FixLS_da(fit,approx=FALSE, plot_result = TRUE)
 plot(GetPMEst(post_fixed))}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{est_mix_damcmc}},\code{\link{est_mix_bdmcmc}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

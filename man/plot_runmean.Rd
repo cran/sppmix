@@ -19,12 +19,11 @@ constant line then convergence has not been achieved (e.g., label switching is p
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_runmean}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 plot(truemix_surf)
 genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -34,12 +33,11 @@ plot_runmean(fit$genps[,2])
 plot_runmean(fit$genps[,3])}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_damcmc}},
 \code{\link{rmixsurf}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

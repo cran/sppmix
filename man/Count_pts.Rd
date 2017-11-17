@@ -21,12 +21,11 @@ from a point pattern within a specified window.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Count_pts}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf=rmixsurf(m = 3,lambda=100, xlim=c(-5,5),ylim=c(-5,5))
 genPP=rsppmix(truemix_surf)
 plotmix_2d(truemix_surf,genPP)
@@ -38,9 +37,6 @@ Count_pts(genPP,spatstat::square(5))
 Count_pts(genPP,spatstat::owin(c(-5,5),c(-5,5)))}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rsppmix}},
 \code{\link{rmixsurf}},
@@ -48,4 +44,6 @@ Sakis Micheas
 \code{\link[spatstat]{square}},
 \code{\link[spatstat]{owin}}
 }
-
+\author{
+Sakis Micheas
+}

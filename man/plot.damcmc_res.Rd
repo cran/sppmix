@@ -20,12 +20,11 @@ of plots about the fitted Poisson point process with mixture intensity surface.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot.damcmc_res}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_damcmc(pp = spatstat::redwood, m = 10)
 plot(fit)
 #Tornadoes
@@ -50,9 +49,6 @@ plot_chains(post_fixed)
 plot_chains(post_fixed,separate = FALSE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{est_mix_damcmc}},
 \code{\link{PlotUSAStates}},
@@ -61,4 +57,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{FixLS_da}},
 \code{\link{plot_chains}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

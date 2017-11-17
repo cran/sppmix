@@ -126,7 +126,7 @@ getqs <- function(post1, burnin, intvl, m,i) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetKLEst}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -147,8 +147,7 @@ getqs <- function(post1, burnin, intvl, m,i) {
 #' \code{\link{GetMAPEst}},
 #' \code{\link{CompareSurfs}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' #generate a surface
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf,main="True IPPP intensity surface")

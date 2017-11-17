@@ -14,7 +14,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetPMEst}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -28,8 +28,7 @@
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
 #' @seealso \code{\link{est_mix_damcmc}},\code{\link{est_mix_bdmcmc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_damcmc(pp = spatstat::redwood, m = 3)
 #' post_intsurf <- GetPMEst(fit, burnin = 1000)
 #' plot(post_intsurf)
@@ -86,7 +85,7 @@ GetPMEst <- function(
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #drop_realization}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -95,11 +94,10 @@ GetPMEst <- function(
 #' iterations. If a logical vector is provided (with the same length as the chain
 #' length of \code{fit}), it will be used for subsetting directly.
 #'
-#' @author Yuchen Wang, Sakis Micheas
+#' @author Sakis Micheas, Yuchen Wang
 #' @seealso \code{\link{est_mix_bdmcmc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_bdmcmc(spatstat::redwood, m = 5)
 #' fit
 #' drop_realization(fit, 500)
@@ -141,7 +139,7 @@ drop_realization <- function(fit, drop=.1*fit$L) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetMAPEst}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -149,6 +147,18 @@ drop_realization <- function(fit, drop=.1*fit$L) {
 #' @param vals Contains the density values over the point pattern and realizations in the \code{fit} object. This
 #' can be obtained via a call to \code{\link{GetDensityValues}}. If this argument is missing
 #' then the density values are computed herein before computing the MAP estimates.
+#' @param truncate Logical variable indicating whether or not we
+#' normalize the densities of the mixture components
+#' to have all their mass within the window defined
+#' in the point pattern \code{pp}.
+#' @param priortype For different types of priors, ignored right now.
+#' @param d,mu0,Sigma0,df0,sig0 Optional parameters for the prior distributions used: d are the weights
+#' of the Dirichlet prior on the component probabilities.
+#' mu0 and Sigma0 are the mean and covariance matrix of a bivariate normal that yields the component means.
+#' df0 and sig0 are the degrees of freedom and sig0^2*Identity the parameter matrix for the Inverse Wishart prior that yields the component matrices.
+#' If omitted they are set to the following values, which are the default values used in est_mix_damcmc:
+#' Sigma0=cov(cbind(pp$x,pp$y)), mu0=c(mean(pp$x),mean(pp$y)),
+#' sig0=1, df0=10, and d=rep(1,m).
 #' @return An object of type \code{intensity_surface}.
 #' @seealso \code{\link{est_mix_damcmc}},
 #' \code{\link{rmixsurf}},
@@ -156,8 +166,7 @@ drop_realization <- function(fit, drop=.1*fit$L) {
 #' \code{\link{GetPMEst}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf,main="True IPPP intensity surface")
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -171,8 +180,11 @@ drop_realization <- function(fit, drop=.1*fit$L) {
 #' plot(MAPest,main="IPPP intensity surface of MAP estimates for MAP m")}
 #'
 #' @export
-GetMAPEst <- function(fit,burnin = floor(fit$L / 10),vals)
+GetMAPEst <- function(fit,
+    burnin = floor(fit$L / 10),vals,
+    truncate=FALSE,priortype=1,d,mu0,Sigma0,df0,sig0)
 {
+  cat("\nWorking...")
   fit_burnined <- drop_realization(fit, burnin)
   if(class(fit)=="bdmcmc_res")
   {
@@ -182,18 +194,36 @@ GetMAPEst <- function(fit,burnin = floor(fit$L / 10),vals)
 
   m<-fit_burnined$m
   pp=fit_burnined$data
+  if(truncate)
+  {
+    pp=spatstat::ppp(pp$x,pp$y,window=pp$window)
+  }
   n <- pp$n
   pattern <- cbind(pp$x,pp$y)
+  if(missing(Sigma0))
+    Sigma0=stats::cov(cbind(pp$x,pp$y))
+  if(missing(mu0))
+    mu0=c(mean(pp$x),mean(pp$y))
+  if(missing(sig0))
+    sig0=1
+  if(missing(df0))
+    df0=10
+  if(missing(d))
+    d=rep(1, m)
+  else
+    d=suppressWarnings(as.vector(matrix(data=d,nrow=m,ncol=1)))
   if(missing(vals))
   {
     vals=GetDensityValues_sppmix(pattern,
           fit_burnined,as.vector(pp$window$xrange),
           as.vector(pp$window$yrange))
-    priorvals=GetPriorVals(fit_burnined)
+    priorvals=GetPriorVals(
+      pp=pattern,allgens=fit_burnined$allgens_List,priortype,d,mu0,Sigma0,df0,sig0)
   }
   else
   {
-    priorvals=GetPriorVals(fit)
+    priorvals=GetPriorVals(
+      pp=pattern,allgens=fit_burnined$allgens_List,priortype,d,mu0,Sigma0,df0,sig0)
     if(length(vals$Density)!=length(priorvals))
       stop("Make sure you apply the right burnin or don't pass the density values so they're calculated again.")
   }
@@ -210,6 +240,7 @@ GetMAPEst <- function(fit,burnin = floor(fit$L / 10),vals)
     MAPmus[[i]] <- mus[i, ]
     MAPsigmas[[i]] <- matrix(unlist(sigmas[i]), 2, 2)
   }
+  cat("Done\n")
   normmix(MAPps, MAPmus, MAPsigmas, MAPlambda,
           fit_burnined$data$window, estimated = TRUE)
 }
@@ -224,7 +255,7 @@ GetMAPEst <- function(fit,burnin = floor(fit$L / 10),vals)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetDensityValues}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -241,8 +272,7 @@ GetMAPEst <- function(fit,burnin = floor(fit$L / 10),vals)
 #' \code{\link{est_mix_bdmcmc}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # create the true mixture intensity surface
 #' truesurf =normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7),
 #'  c(0.5, 0.5)),sigmas=list(.01*diag(2), .01*diag(2), .01*diag(2)),
@@ -273,84 +303,11 @@ GetDensityValues<- function(fit)
   return(vals)
 }
 
-
-GetPriorVals <- function(fit)
+GetPriorVals<-function(
+  pp,allgens,priortype,d,mu0,Sigma0,df0,sig0)
 {
-  #for each realization, compute and return the
-  #prior density at those values
-  L=fit$L
-  m=fit$m
-  pp=fit$data
-  n <- pp$n
-  pattern <- cbind(pp$x,pp$y)
-  priorvals=rep(1,L)
-  Rx=max(pp$x)-min(pp$x)
-  Ry=max(pp$y)-min(pp$y)
-  ksi=cbind(mean(pp$x),mean(pp$y))
-  Idenmat=diag(2)
-  kappa=diag(x=c(100/(Rx*Rx),100/(Ry*Ry)),2,2)
-  kappainv=diag(x=c(Rx*Rx/100,Ry*Ry/100),2,2)
-  sumxmu=matrix(0,2,2)
-  for(r in 1:n)
-    sumxmu=sumxmu+t(pattern[r,]-ksi)%*%(pattern[r,]-ksi)
-  ps2=invmat2d_sppmix(2*Idenmat+sumxmu/(n-1));
-  for(i in 1:L)
-  {
-    priorvals[i]=dDirichlet(fit$genps[i,])*
-      prod(mvtnorm::dmvnorm(fit$genmus[,,i],ksi,kappainv))*
-      prod(dInvWishart(fit$gensigmas[i,],
-                       df=2*3,p=2,alpha=2*ps2))
-  }
-  return(priorvals)
-}
-
-
-dDirichlet <- function(ps,ds=rep(1,length(ps)))
-{
-  dens=prod(ps^(ds-1))*gamma(sum(ds))/
-    prod(gamma(ds))
-  return(dens)
-}
-
-
-MultGamma <- function(p,n)
-{
-  sum1=0
-  for(i in 0:(p-1))
-    sum1=sum1+logGammaFunc_sppmix((n-1)/2-i/2)
-  return (exp((p*(p-1)/4)*log(pi)+sum1))
-}
-
-
-dInvWishart <- function(rmat,df=10,p=2,alpha=diag(2))
-{
-  if(!is.list(rmat))
-    stop("rmat must be a list of matrices and alpha a 2x2 matrix.")
-  L=length(rmat)
-  dens=rep(0,L)
-  const=det(alpha)^(df/2)*2^(-df*p/2)/
-    MultGamma(p,df/2)
-  for(i in 1:L)
-    dens[i]=const*det(rmat[[i]])^(-(df+p+1)/2)*
-    exp(-(1/2)*matrix.trace(alpha%*%
-                              invmat2d_sppmix(matrix(unlist(rmat[[i]]),2,2))))
-  return(dens)
-}
-
-
-dWishart <- function(rmat,df=10,p=2,alpha=diag(2))
-{
-  if(!is.list(rmat))
-    stop("rmat must be a list of matrices and alpha a 2x2 matrix.")
-  L=length(rmat)
-  dens=rep(0,L)
-  const=det(alpha)^((df-1-p-1)/2)*2^(-(df-1)*p/2)/
-    MultGamma(p,(df-1)/2)
-  for(i in 1:L)
-    dens[i]=const*det(rmat[[i]])^(-(df-1)/2)*
-      exp(-(1/2)*matrix.trace(
-        invmat2d_sppmix(matrix(unlist(rmat[[i]]),2,2))%*%alpha))
-  return(dens)
+  #done in c++ code now faster
+  return (GetPriorVals_sppmix(pp,allgens,priortype,d,mu0,Sigma0,df0,sig0))
 }
 
 #' Retrieve the IPPP likelihood value
@@ -361,7 +318,7 @@ dWishart <- function(rmat,df=10,p=2,alpha=diag(2))
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetIPPPLikValue}
 #'
 #' @param pp Point pattern object of class \code{ppp}.
@@ -376,8 +333,7 @@ dWishart <- function(rmat,df=10,p=2,alpha=diag(2))
 #' \code{\link{GetPMEst}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100,xlim = c(-3,3),ylim = c(-3,3))
 #' plot(truemix_surf,main="True IPPP intensity surface")
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)

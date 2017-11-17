@@ -35,12 +35,11 @@ find the parameter values that minimize the PEL.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetKLEst}
 }
 \examples{
-
-\dontrun{
+\donttest{
 #generate a surface
 truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 plot(truemix_surf,main="True IPPP intensity surface")
@@ -66,9 +65,6 @@ CompareSurfs(truemix_surf, KLest, LL = 100, truncate = FALSE)
 CompareSurfs(truemix_surf, KLestLSFixed, LL = 100, truncate = FALSE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \seealso{
 \code{\link{rmixsurf}},
 \code{\link{rsppmix}},
@@ -77,4 +73,6 @@ Jiaxun Chen, Sakis Micheas
 \code{\link{GetMAPEst}},
 \code{\link{CompareSurfs}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

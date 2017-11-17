@@ -13,9 +13,7 @@ plotstring(str = "Hello World")
 The \code{plotstring} function plots a string in a generic plot device.
 }
 \examples{
-
-\dontrun{
+\donttest{
 plotstring()}
 
 }
-

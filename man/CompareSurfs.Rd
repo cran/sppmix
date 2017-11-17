@@ -37,7 +37,7 @@ two estimating surfaces this way.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #CompareSurfs}
 }
 \details{
@@ -51,8 +51,7 @@ the function will choose the largest one
 and compare the two surfaces in there.
 }
 \examples{
-
-\dontrun{
+\donttest{
 #compare two surfaces first
 mixsurf1 = rmixsurf(m = 5, sig0 = .1, df = 5,xlim= c(-1,4), ylim = c(-2,1), rand_m = FALSE)
 mixsurf2 = rmixsurf(m = 8, sig0 = .1, df = 5,xlim= c(-4,3), ylim = c(-1,2), rand_m = FALSE)
@@ -90,9 +89,6 @@ avgsurfMAPcomp_plus1=plot_avgsurf(BDfitMAPcomp_plus1$BDgens, LL = 100,burnin=0)
 comp=CompareSurfs(truemixsurf,avgsurfMAPcomp_plus1,LL=100)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rmixsurf}},
 \code{\link[spatstat]{owin}},
@@ -103,4 +99,6 @@ Sakis Micheas
 \code{\link{plot_avgsurf}},
 \code{\link{GetBMA}},
 }
-
+\author{
+Sakis Micheas
+}

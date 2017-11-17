@@ -52,7 +52,7 @@ approximated via the MAP estimators of DAMCMC runs.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #selectMix}
 }
 \details{
@@ -79,8 +79,7 @@ want the surface, then the Bayesian model
 average from the BDMCMC fit is the best solution.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # create the true mixture intensity surface
 truesurf <- normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7), c(0.5, 0.5)),
  sigmas = list(.01*diag(2), .01*diag(2), .01*diag(2)), lambda=100, win=spatstat::square(1))
@@ -102,9 +101,6 @@ ModelSel1=selectMix(pp,1:5,runallperms = 1, truncate=FALSE)
 ModelSel2=selectMix(pp,1:5,runallperms = 2, truncate=FALSE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \references{
 Stephens, M. (2000). Bayesian analysis of mixture models with an unknown number of components: an alternative to reversible jump methods. The Annals of Statistics, 28, 1, 40-74.
 
@@ -121,4 +117,6 @@ Jasra, A., Holmes, C.C. and Stephens, D. A. (2005). Markov Chain Monte Carlo Met
 \code{\link{FixLS_da}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

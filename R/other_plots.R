@@ -1,3 +1,60 @@
+get_states_bbox <- function(x)
+{
+  n=length(x$Names)
+  xlims=rep(0,2)
+  ylims=rep(0,2)
+  xlims[1]=ylims[1]=100000000000
+  xlims[2]=ylims[2]=-100000000000
+  for(i in 1:n)
+  {
+    polies=x$Polies[[i]]
+    for(j in 1:length(polies))
+    {
+      #get x-y range
+      xlim=range(x$Polies[[i]][[j]][,1])
+      ylim=range(x$Polies[[i]][[j]][,2])
+      if(xlim[1]<xlims[1])xlims[1]=xlim[1]
+      if(ylim[1]<ylims[1])ylims[1]=ylim[1]
+      if(xlim[2]>xlims[2])xlims[2]=xlim[2]
+      if(ylim[2]>ylims[2])ylims[2]=ylim[2]
+    }
+  }
+  return(list(xlims=xlims,ylims=ylims))
+}
+
+get_states_info <- function(states,stateonly=TRUE)
+{
+  shp=sppmix::USAStatesCounties2016
+  #retrieves the states requested
+  #and all county info on those states
+  if (is.null(states))
+    stateids=rep(TRUE,length(shp$StateNames) )
+  else
+    #find the state indices corresponding to these states
+    stateids=tolower(shp$StateNames) %in% tolower(states)
+  info=NULL
+  if(stateonly)
+  {
+    #build a list with all state selected
+    info$Names=shp$StateNames[stateids]
+    info$Polies=shp$StatePolygons[stateids]
+  }
+  else
+    #build a list with all counties for
+    #the selected states
+  {
+    dat=shp$CountiesbyState[stateids]
+    info$Names=NULL
+    info$Polies=NULL
+    for(i in 1:length(dat))
+    {
+      info$Names=c(info$Names,dat[[i]]$CountyName)
+      info$Polies=c(info$Polies,dat[[i]]$CountyPolies)
+    }
+  }
+  return(info)
+}
+
 #' Visualization of USA states and their counties
 #'
 #' @description
@@ -9,7 +66,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #PlotUSAStates}
 #'
 #' @param showcounties Logical to denote that we want a plot of counties.
@@ -78,9 +135,10 @@
 #' @param namescolor A specific color to use
 #' for drawing the state or county names when
 #' \code{plotnames=TRUE}. Default is "black".
+#' @param ppsize Size used in plotting the points. Default is 1.
 #'
-#' @details Note that we use the state and county longitude and latitude boundaries from
-#' the \code{\link[USAboundaries]{USAboundaries}} package.
+#' @details Note that we use the state and county longitude and latitude boundaries in
+#' the \code{\link{USAStatesCounties2016}} object.
 #'
 #' @return A list containing the following components:
 #' \item{PPPcent}{The centroids of the states or counties requested, returned as a marked point pattern.}
@@ -88,7 +146,7 @@
 #' \item{itemnames}{Vector of strings containing all items processed (i.e., either all state names or all county names).}
 #' \item{p}{The created plot, otherwise NULL.}
 #'
-#' @author Sakis Micheas
+#' @author Sakis Micheas and Jiaxun Chen
 #'
 #' @seealso \code{\link{est_MIPPP_cond_loc}},
 #' \code{\link{est_mix_damcmc}},
@@ -102,8 +160,7 @@
 #' \code{\link{plot_MPP_probs}},
 #' \code{\link{GetMAPEst}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' #plot the continental USA with uniformly sampled discrete marks from 10 different levels
 #' ret=PlotUSAStates(states=ContinentalUSA_state_names, levels=1:10, grayscale = FALSE,
 #'  shownames=TRUE, plotlevels =TRUE, discretelevels=TRUE, main="Continental USA (generated levels)")
@@ -192,33 +249,30 @@
 #'
 #' @export
 PlotUSAStates=function(showcounties=FALSE,
-  states="Missouri",showcentroids=TRUE,
-  typecentroid=0,shownames=FALSE,
-  showmarks=FALSE,grayscale=FALSE,
-  open_new_window = FALSE,
-  main="States (true levels)",
-  guidemain="Level",discretelevels=TRUE,
-  levels=1:3,showplot=TRUE,plotlevels=TRUE,
-  marks,pp,surf,boundarycolor="black",
-  namescolor="black")
+                       states="Missouri",showcentroids=TRUE,
+                       typecentroid=0,shownames=FALSE,
+                       showmarks=FALSE,grayscale=FALSE,
+                       open_new_window = FALSE,
+                       main="States (true levels)",
+                       guidemain="Level",discretelevels=TRUE,
+                       levels=1:3,showplot=TRUE,plotlevels=TRUE,
+                       marks,pp,surf,boundarycolor="black",
+                       namescolor="black",ppsize=1.0)
 {
-  x=y=id=value=NULL
+  x=y=id=value=statenames=colval=NULL
+  all_info=get_states_info(
+    states=states,stateonly=!showcounties)
+  all_names <- factor(as.character(all_info$Names))
+  n_info=length(all_names)
   if(showcounties)
-    state_info=USAboundaries::us_counties(states=states)
+    cat("\nNumber of counties requested is",n_info,"\n")
   else
-    state_info=USAboundaries::us_states(states=states)
-  state_names <- factor(state_info@data$name)
-  #  cat(state_info@data$name)
-  #  idsnums <- unclass(factor(state_info@data$name))
-  nstate_info=length(state_info$name)
-  if(showcounties)
-    cat("\nNumber of counties requested is",nstate_info,"\n")
-  else
-    cat("\nNumber of states requested is",nstate_info,"\n")
+    cat("\nNumber of states requested is",n_info,"\n")
   if(missing(surf) & missing(pp))
   {
-    xlims=c(state_info@bbox[1,1],state_info@bbox[1,2])
-    ylims=c(state_info@bbox[2,1],state_info@bbox[2,2])
+    limits=get_states_bbox(all_info)
+    xlims=limits$xlims
+    ylims=limits$ylims
   }
   else
   {
@@ -234,9 +288,9 @@ PlotUSAStates=function(showcounties=FALSE,
     }
   }
   win=spatstat::owin(xlims,ylims)
-  centers=matrix(0,nstate_info,2)
+  centers=matrix(0,n_info,2)
   #lower-left points
-  ll_pt=matrix(0,nstate_info,2)
+  ll_pt=matrix(0,n_info,2)
   nlevels=length(levels)
   levelnumbers=1:nlevels
   allstatecoords=NULL
@@ -247,25 +301,26 @@ PlotUSAStates=function(showcounties=FALSE,
   genMARKS=FALSE
   if(missing(marks))
   {
-    marks=rep(0,nstate_info)
+    marks=rep(0,n_info)
     marks_names=marks
     genMARKS=TRUE
   }
   else
-    if(length(marks)!=nstate_info)
+  {
+    if(length(marks)!=n_info)
     {
-      warning("The number of marks passed is not the same as the number of states passed. The mark vector should have ",nstate_info," elements. Will generate the marks.")
-      marks=rep(0,nstate_info)
+      warning("The number of marks passed is not the same as the number of states passed. The mark vector should have ",n_info," elements. Will generate the marks.")
+      marks=rep(0,n_info)
       marks_names=marks
       genMARKS=TRUE
     }
-
+  }
   rep_ids=NULL
   ids=NULL
   plotmarkvals=NULL
-  for (i in 1:nstate_info)
+  newid = 0
+  for (i in 1:n_info)
   {
-    #    cat("\n",state_info@data$name[i])
     if(genMARKS)
     {
       if(discretelevels)
@@ -276,20 +331,18 @@ PlotUSAStates=function(showcounties=FALSE,
       else
         marks[i]=runif(1)
     }
-    statepolies<-state_info@polygons[[i]]#@Polygons#[[1]]
-    numpolies=length(statepolies@Polygons)
-#    if(numpolies>1){print(state_names[i]);cat("\n",numpolies,"\n")}
+    statepolies=all_info$Polies[[i]]
+    numpolies=length(statepolies)
+    #    if(numpolies>1){print(state_names[i]);cat("\n",numpolies,"\n")}
     statecoords=NULL
     curid=NULL
     for(j in 1:numpolies)
     {
-      #      ind=match(j,statepolies@plotOrder)
-      #      statepoly=statepolies@Polygons[[ind]]
-      statepoly=statepolies@Polygons[[j]]
-      statecoords<-rbind(statecoords,statepoly@coords)
+      statepoly=statepolies[[j]]
+      statecoords<-rbind(statecoords,statepoly)
 
-      nscoord=nrow(statepoly@coords)
-      newid=as.numeric(paste(as.character(i),as.character(j),sep=""))
+      nscoord=nrow(statepoly)
+      newid=newid + 1
       ids=c(ids,newid)
       curpolyid=rep(newid,nscoord)
       curid=c(curid,curpolyid)
@@ -300,20 +353,20 @@ PlotUSAStates=function(showcounties=FALSE,
     rep_ids=c(rep_ids,curid)
     allstatecoords<-rbind(allstatecoords,statecoords)
     centers[i,]<-apply(statecoords,2,mean)
+
     gotit=FALSE
     for(j in 1:numpolies)
     {
-      statecoords1=statepolies@Polygons[[j]]@coords
-      if(sp::point.in.polygon(centers[i,1],
-                          centers[i,2],statecoords1[,1],
-                          statecoords1[,2])>0)
+      statecoords1=statepolies[[j]]
+      if(CheckInPoly(statecoords1,
+                     centers[i,]))
       {
         gotit=TRUE
         break
       }
     }
     #if the center is not in the polygon
-    #sample it randomly form the poly
+    #sample it randomly from the poly
     while(!gotit)
     {
       centers[i,1]=runif(1,min(statecoords[,1])
@@ -322,10 +375,9 @@ PlotUSAStates=function(showcounties=FALSE,
                          ,max(statecoords[,2]))
       for(j in 1:numpolies)
       {
-        statecoords1=statepolies@Polygons[[j]]@coords
-        if(sp::point.in.polygon(centers[i,1],
-                            centers[i,2],statecoords1[,1],
-                            statecoords1[,2])>0)
+        statecoords1=statepolies[[j]]
+        if(CheckInPoly(statecoords1,
+                       centers[i,]))
         {
           gotit=TRUE
           break
@@ -365,7 +417,7 @@ PlotUSAStates=function(showcounties=FALSE,
       {
         density_df=as.data.frame(surf)
         p <- ggplot(data=density_df,aes(x=x, y=y))+
-        geom_raster(aes(fill = value), interpolate = TRUE) +
+          geom_raster(aes(fill = value), interpolate = TRUE) +
           scale_fill_gradientn(colors = cols) +
           guides(fill = guide_colorbar(
             title = "Elevation",nbin = 100, barheight = 15))
@@ -386,7 +438,7 @@ PlotUSAStates=function(showcounties=FALSE,
                                   barheight = 15))
       }
     }
-    datapoly <- merge(values, positions, by=c("id"))
+    datapoly <- merge(values, positions, by=c("id"), sort=FALSE)
     if(plotlevels)
     {
       if(is.null(boundarycolor))
@@ -401,15 +453,17 @@ PlotUSAStates=function(showcounties=FALSE,
     {
       if(!is.null(boundarycolor))
         p<-p+geom_path(data=datapoly,
-                     aes(x=x,y=y, group=id),
-                     color=boundarycolor)
+                       aes(x=x,y=y, group=id),
+                       color=boundarycolor)
     }
+    #    cat("pass1");# return()
     p<-p+ggtitle(main)+
       labs(x = "Longitude",y = "Latitude")+
       theme_classic() +
       theme(panel.border = element_rect(fill = NA, size = 1))+
       coord_cartesian(xlim =xlims,
                       ylim =ylims)#,expand=FALSE)
+    #    cat("pass2");# return()
     if(plotlevels)
     {
       if(discretelevels)
@@ -429,11 +483,12 @@ PlotUSAStates=function(showcounties=FALSE,
         p<-p+
           scale_fill_continuous(low=lowcol,
                                 high=highcol,
-                                breaks=levelnumbers,
-                                labels=levels,
+                                breaks=sort(unique(marks)),
+                                labels=sort(unique(marks)),
                                 guide = guide_legend(
                                   reverse=TRUE,title = guidemain)
           )
+        #       cat("pass3"); return()
       }
       else
       {
@@ -450,8 +505,10 @@ PlotUSAStates=function(showcounties=FALSE,
             barheight = 15))
       }
     }
+    #print(p); cat("pass4");# return()
     cents=data.frame(x=centers[,1],
-                     y=centers[,2])
+                     y=centers[,2],
+                     statenames=as.character(all_names))
     llpts<-data.frame(x=ll_pt[,1],
                       y=ll_pt[,2],
                       colval=marks)
@@ -459,13 +516,15 @@ PlotUSAStates=function(showcounties=FALSE,
       p<-p+geom_text(data=cents,
                      color=namescolor,#check_overlap=TRUE,
                      size=2.5,
-                     aes(x=x,y=y,label=state_names,
+                     aes(x=x,y=y,label=statenames,
                          show.legend=FALSE))
+    #print(p);cat("pass5");# return()
     if(showmarks)
       p<-p+geom_text(data=llpts,
                      color=namescolor,#check_overlap=TRUE,
-                     aes(x=x,y=y,label=marks_names,
+                     aes(x=x,y=y,label=colval,# sort(unique(marks)),
                          show.legend=FALSE))
+    #   print(p);cat("pass6");# return()
     if(showcentroids)
     {
       if(typecentroid==0)
@@ -487,12 +546,13 @@ PlotUSAStates=function(showcounties=FALSE,
     {
       p<-p+geom_point(#inherit.aes=FALSE,
         data=as.data.frame(pp),
-        aes(x=pp$x,y=pp$y),
+        aes(x=pp$x,y=pp$y),size=ppsize,
         color="black",show.legend=FALSE)
     }
     if(!missing(pp) | !missing(surf))
       p<-p+coord_cartesian(xlim =xlims,
                            ylim =ylims,expand=FALSE)
+    p<-p+ggplot2::theme(plot.margin=ggplot2::unit(c(1,1,1,0), "lines"))
     print(p)
   }
   else
@@ -503,6 +563,6 @@ PlotUSAStates=function(showcounties=FALSE,
                  window=win,marks=marks, check=FALSE)
   return(list(PPPcent=PPPcent,
               PPPMarker=PPPMarker,
-              itemnames=state_info@data$name,
+              itemnames=all_names,
               p=p))
 }

@@ -69,7 +69,7 @@ distribution is responsible for the number of events in the point pattern.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #rMIPPP_cond_mark}
 }
 \details{
@@ -100,8 +100,7 @@ See Micheas (2014) for more details on
 Marked IPPP models via conditioning arguments.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # Create a marked point pattern; use randomization and 2 discrete uniform
 # marks (default values)
 newMPP=rMIPPP_cond_mark(bigwin = spatstat::owin(c(-10,10),c(-10,10)))
@@ -114,13 +113,12 @@ plotmix_2d(newMPP$groundsurfs[[2]], newMPP$groundPPs[[2]])+ add_title(
  "Poisson point pattern for mark 2", n=newMPP$genMPP$n, m=newMPP$groundsurfs[[2]]$m)}
 
 }
-\author{
-Sakis Micheas
-}
 \references{
 Hierarchical Bayesian Modeling of Marked Non-Homogeneous Poisson Processes with finite mixtures and inclusion of covariate information. Micheas, A.C. (2014). Journal of Applied Statistics, 41, 12, 2596-2615, DOI: 10.1080/02664763.2014.922167.
 }
 \seealso{
 \code{\link{plotmix_2d}}
 }
-
+\author{
+Sakis Micheas
+}

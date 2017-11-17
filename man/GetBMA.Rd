@@ -32,12 +32,11 @@ and returns the fitted Poisson point process with mixture of normals intensity s
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetBMA}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit=est_mix_bdmcmc(pp = spatstat::redwood, m = 5)
 BMA=GetBMA(fit)
 burnin=.1*fit$L
@@ -48,12 +47,11 @@ plot_density(as.data.frame(BMA),TRUE)+ggplot2::ggtitle(
  "Contours of the Bayesian model average intensity surface")}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_bdmcmc}},
 \code{\link{plotmix_3d}},
 \code{\link{plot_density}}
 }
-
+\author{
+Sakis Micheas
+}

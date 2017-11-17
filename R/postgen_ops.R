@@ -23,7 +23,7 @@ MakeMixtureList<- function(allgens_List,burnin=1000)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetBDCompfit}
 #'
 #' @param BDfit Object of class \code{damcmc_res}.
@@ -42,8 +42,7 @@ MakeMixtureList<- function(allgens_List,burnin=1000)
 #' \code{\link{plot.damcmc_res}},
 #' \code{\link{plot.normmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_bdmcmc(pp = spatstat::redwood, m = 7)
 #' GetBDTable(fit)
 #' #retrieve all BDMCMC realizations corresponding to a mixture with 5 components
@@ -154,7 +153,7 @@ GetBDCompfit<- function(BDfit,num_comp,burnin=floor(BDfit$L/10))
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetBDTable}
 #'
 #' @param BDfit A BDMCMC fit obtain from \code{\link{est_mix_bdmcmc}}.
@@ -166,8 +165,7 @@ GetBDCompfit<- function(BDfit,num_comp,burnin=floor(BDfit$L/10))
 #' @author Sakis Micheas
 #' @seealso \code{\link{est_mix_bdmcmc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_bdmcmc(pp = spatstat::redwood, m = 7)
 #' GetBDTable(fit)}
 #'
@@ -200,7 +198,7 @@ GetBDTable<- function(BDfit,showtable=TRUE)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetMAPLabels}
 #'
 #' @param fit Object of class \code{damcmc_res} or \code{bdmcmc_res}.
@@ -213,8 +211,7 @@ GetBDTable<- function(BDfit,showtable=TRUE)
 #' \code{\link{rsppmix}},
 #' \code{\link{est_mix_damcmc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
 #'  sigmas = list(.02*diag(2), .05*diag(2), .01*diag(2)))
 #' intsurf=to_int_surf(truemix,lambda = 100, win = spatstat::square(1))
@@ -252,7 +249,7 @@ GetMAPLabels<-function(fit)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetStats}
 #'
 #' @param chain A Markov Chain (a vector) containing the posterior realizations of the parameter.
@@ -263,8 +260,7 @@ GetMAPLabels<-function(fit)
 #' \code{\link{rsppmix}},
 #' \code{\link{est_mix_damcmc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
 #'  sigmas = list(.02*diag(2), .05*diag(2), .01*diag(2)))
 #' intsurf=to_int_surf(truemix,lambda = 100, win = spatstat::square(1))

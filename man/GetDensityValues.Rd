@@ -26,12 +26,11 @@ only the realizations corresponding to the MAP number of components are used for
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetDensityValues}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # create the true mixture intensity surface
 truesurf =normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7),
  c(0.5, 0.5)),sigmas=list(.01*diag(2), .01*diag(2), .01*diag(2)),
@@ -45,13 +44,12 @@ MAPest=GetMAPEst(fit,vals=allvals)
 plot(MAPest,main="IPPP intensity surface of MAP estimates")}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{est_mix_damcmc}},
 \code{\link{est_mix_bdmcmc}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

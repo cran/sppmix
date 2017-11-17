@@ -94,8 +94,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // DAMCMC2d_sppmix
-List DAMCMC2d_sppmix(mat const& points, vec const& xlims, vec const& ylims, int const& m, int const& L, bool const& truncate, vec const& hyperparams);
-RcppExport SEXP sppmix_DAMCMC2d_sppmix(SEXP pointsSEXP, SEXP xlimsSEXP, SEXP ylimsSEXP, SEXP mSEXP, SEXP LSEXP, SEXP truncateSEXP, SEXP hyperparamsSEXP) {
+List DAMCMC2d_sppmix(mat const& points, vec const& xlims, vec const& ylims, int const& m, int const& L, bool const& truncate, vec const& hyperparams, bool const& useKmeans);
+RcppExport SEXP sppmix_DAMCMC2d_sppmix(SEXP pointsSEXP, SEXP xlimsSEXP, SEXP ylimsSEXP, SEXP mSEXP, SEXP LSEXP, SEXP truncateSEXP, SEXP hyperparamsSEXP, SEXP useKmeansSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -106,7 +106,92 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int const& >::type L(LSEXP);
     Rcpp::traits::input_parameter< bool const& >::type truncate(truncateSEXP);
     Rcpp::traits::input_parameter< vec const& >::type hyperparams(hyperparamsSEXP);
-    rcpp_result_gen = Rcpp::wrap(DAMCMC2d_sppmix(points, xlims, ylims, m, L, truncate, hyperparams));
+    Rcpp::traits::input_parameter< bool const& >::type useKmeans(useKmeansSEXP);
+    rcpp_result_gen = Rcpp::wrap(DAMCMC2d_sppmix(points, xlims, ylims, m, L, truncate, hyperparams, useKmeans));
+    return rcpp_result_gen;
+END_RCPP
+}
+// DAMCMC2dRMCP_sppmix
+List DAMCMC2dRMCP_sppmix(mat const& points, vec const& xlims, vec const& ylims, int const& m, int const& L, bool const& truncate, vec const& d, vec const& mu0, mat const& Sigma0, int const& df0, double const& sig0, bool const& useKmeans, mat const& startmus);
+RcppExport SEXP sppmix_DAMCMC2dRMCP_sppmix(SEXP pointsSEXP, SEXP xlimsSEXP, SEXP ylimsSEXP, SEXP mSEXP, SEXP LSEXP, SEXP truncateSEXP, SEXP dSEXP, SEXP mu0SEXP, SEXP Sigma0SEXP, SEXP df0SEXP, SEXP sig0SEXP, SEXP useKmeansSEXP, SEXP startmusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type points(pointsSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type xlims(xlimsSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type ylims(ylimsSEXP);
+    Rcpp::traits::input_parameter< int const& >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int const& >::type L(LSEXP);
+    Rcpp::traits::input_parameter< bool const& >::type truncate(truncateSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type d(dSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< mat const& >::type Sigma0(Sigma0SEXP);
+    Rcpp::traits::input_parameter< int const& >::type df0(df0SEXP);
+    Rcpp::traits::input_parameter< double const& >::type sig0(sig0SEXP);
+    Rcpp::traits::input_parameter< bool const& >::type useKmeans(useKmeansSEXP);
+    Rcpp::traits::input_parameter< mat const& >::type startmus(startmusSEXP);
+    rcpp_result_gen = Rcpp::wrap(DAMCMC2dRMCP_sppmix(points, xlims, ylims, m, L, truncate, d, mu0, Sigma0, df0, sig0, useKmeans, startmus));
+    return rcpp_result_gen;
+END_RCPP
+}
+// TriangleArea
+double TriangleArea(vec const& a, vec const& b, vec const& c);
+RcppExport SEXP sppmix_TriangleArea(SEXP aSEXP, SEXP bSEXP, SEXP cSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< vec const& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(TriangleArea(a, b, c));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CheckTriangleCLockwise
+int CheckTriangleCLockwise(vec const& a, vec const& b, vec const& c);
+RcppExport SEXP sppmix_CheckTriangleCLockwise(SEXP aSEXP, SEXP bSEXP, SEXP cSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< vec const& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(CheckTriangleCLockwise(a, b, c));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CheckInPoly
+bool CheckInPoly(mat const& poly, vec const& xy);
+RcppExport SEXP sppmix_CheckInPoly(SEXP polySEXP, SEXP xySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type poly(polySEXP);
+    Rcpp::traits::input_parameter< vec const& >::type xy(xySEXP);
+    rcpp_result_gen = Rcpp::wrap(CheckInPoly(poly, xy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// MatrixNorm
+double MatrixNorm(mat const& M, double const& p);
+RcppExport SEXP sppmix_MatrixNorm(SEXP MSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< double const& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(MatrixNorm(M, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// MatTrace
+double MatTrace(mat const& M);
+RcppExport SEXP sppmix_MatTrace(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(MatTrace(M));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -442,6 +527,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// MultGamma
+double MultGamma(int const& p, int const& n);
+RcppExport SEXP sppmix_MultGamma(SEXP pSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int const& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int const& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(MultGamma(p, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dInvWishart_sppmix
+double dInvWishart_sppmix(mat const& W, double const& df, mat const& alpha);
+RcppExport SEXP sppmix_dInvWishart_sppmix(SEXP WSEXP, SEXP dfSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< double const& >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< mat const& >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(dInvWishart_sppmix(W, df, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // MIPPCondLoc_sppmix
 List MIPPCondLoc_sppmix(mat const& points, vec const& marks, vec const& xlims, vec const& ylims, int const& L, bool const& truncate, vec const& hyperparams, vec const& uniquemarks, bool const& discrete_mark, double const& r);
 RcppExport SEXP sppmix_MIPPCondLoc_sppmix(SEXP pointsSEXP, SEXP marksSEXP, SEXP xlimsSEXP, SEXP ylimsSEXP, SEXP LSEXP, SEXP truncateSEXP, SEXP hyperparamsSEXP, SEXP uniquemarksSEXP, SEXP discrete_markSEXP, SEXP rSEXP) {
@@ -514,6 +624,24 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool const& >::type truncate(truncateSEXP);
     Rcpp::traits::input_parameter< double const& >::type r(rSEXP);
     rcpp_result_gen = Rcpp::wrap(GetProbCondLoc_sppmix(points, origmarks, xlims, ylims, meangamma, uniquemarks, truncate, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetPriorVals_sppmix
+vec GetPriorVals_sppmix(mat const& pp, List const& allgens, int const& priortype, vec const& d, vec const& mu0, mat const& Sigma0, int const& df0, double const& sig0);
+RcppExport SEXP sppmix_GetPriorVals_sppmix(SEXP ppSEXP, SEXP allgensSEXP, SEXP priortypeSEXP, SEXP dSEXP, SEXP mu0SEXP, SEXP Sigma0SEXP, SEXP df0SEXP, SEXP sig0SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< mat const& >::type pp(ppSEXP);
+    Rcpp::traits::input_parameter< List const& >::type allgens(allgensSEXP);
+    Rcpp::traits::input_parameter< int const& >::type priortype(priortypeSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type d(dSEXP);
+    Rcpp::traits::input_parameter< vec const& >::type mu0(mu0SEXP);
+    Rcpp::traits::input_parameter< mat const& >::type Sigma0(Sigma0SEXP);
+    Rcpp::traits::input_parameter< int const& >::type df0(df0SEXP);
+    Rcpp::traits::input_parameter< double const& >::type sig0(sig0SEXP);
+    rcpp_result_gen = Rcpp::wrap(GetPriorVals_sppmix(pp, allgens, priortype, d, mu0, Sigma0, df0, sig0));
     return rcpp_result_gen;
 END_RCPP
 }

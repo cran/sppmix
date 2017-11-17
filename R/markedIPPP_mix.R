@@ -13,16 +13,16 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #est_MIPPP_cond_loc}
 #'
 #' @param pp Marked point pattern of class \code{ppp}.
 #' @param r Radius used to define the neighborhood system. Any two locations within this distance are considered neighbors.
-#' @param hyper Hyperparameter for the distribution of gamma.
+#' @param hyper Hyperparameter for the proposal distribution of gamma. This is currently the standard deviation for the random walk Metropolis-Hastings steps (one step for each gamma). Use a small value.
 #' @param L Number of iterations for the MCMC; default is 10000.
 #' @param burnin Number of initial realizations to discard. By default, it is 1/10 of the total number of iterations.
 #' @param m The number of components to fit for the ground process when \code{fit_groundIPPP=TRUE}.
-#' @param fit_groundIPPP Logical variance requesting to fit and return the DAMCMC results of the gorund process.
+#' @param fit_groundIPPP Logical variable requesting to fit and return the DAMCMC results of the ground process.
 #' @param truncate Logical variable indicating whether or not we
 #' we only work with events within the window defined
 #' in the point pattern \code{pp}.
@@ -30,6 +30,7 @@
 #' @param discrete_mark Logical flag indicating whether the mark is a discrete (numerical value) or not.
 #' For continuous marks set this to FALSE.
 #' @param LL Length of the side of the square grid.
+#' @param startgamma Initial value for the gamma vector. If missing the zero vector is used.
 #' @param open_new_window Open a new window for a plot.
 #' @param show_plots Logical variable requesting to produce the probability field plots for each mark.
 #' @param ... Additional arguments for the S3 method.
@@ -87,8 +88,7 @@
 #' @seealso \code{\link{GetStats}},
 #' \code{\link{rMIPPP_cond_loc}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # Create a marked point pattern
 #' x <- runif(100)
 #' y <- runif(100)
@@ -135,7 +135,8 @@
 #' # the marks must start from 1, recode the original
 #' Tornadoes2011MO1=Tornadoes2011MO
 #' Tornadoes2011MO1$marks=Tornadoes2011MO1$marks+1
-#' mpp_est=est_MIPPP_cond_loc(Tornadoes2011MO1,r=.5,hyper=1.0,fit_groundIPPP=TRUE)
+#' mpp_est=est_MIPPP_cond_loc(Tornadoes2011MO1,r=1.5,hyper=0.01,
+#'  startgamma = c(.1,.2,.3,.4,.5,.6),fit_groundIPPP=TRUE)
 #' #Now generate an MIPPP with 3 marks
 #' newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5))
 #' summary(newMPP)
@@ -157,7 +158,7 @@
 #' @export
 est_MIPPP_cond_loc <- function(pp, r, hyper=1, L = 10000,
      burnin= floor(L/10), m=3, fit_groundIPPP=FALSE,
-     truncate=FALSE, grayscale=FALSE,
+     truncate=FALSE, grayscale=FALSE,startgamma,
      discrete_mark = TRUE, LL = 150,
      open_new_window = FALSE, show_plots = TRUE)
 {
@@ -187,10 +188,14 @@ est_MIPPP_cond_loc <- function(pp, r, hyper=1, L = 10000,
       marks <- sort(unique(pp$marks))
     }
     nmarks <- length(marks)
-
+    if(missing(startgamma))
+      startgamma=rep(0,nmarks)
+    hyperparams=rep(0,nmarks+1)
+    hyperparams[1]=hyper
+    hyperparams[2:(nmarks+1)]=startgamma
     MPPfit=MIPPCondLoc_sppmix(pattern,pp$marks,
       pp$window$xrange,pp$window$yrange,
-      L,truncate,hyper,marks,discrete_mark,r)
+      L,truncate,hyperparams,marks,discrete_mark,r)
 
     meangammas=colMeans(MPPfit$gen_gammas[
       -(1:burnin), ])
@@ -281,7 +286,7 @@ est_MIPPP_cond_loc <- function(pp, r, hyper=1, L = 10000,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_MPP_probs}
 #'
 #' @param MPPfit Object of class \code{MIPPP_fit}.
@@ -293,8 +298,7 @@ est_MIPPP_cond_loc <- function(pp, r, hyper=1, L = 10000,
 #' \code{\link{est_MIPPP_cond_loc}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5))
 #' plot(newMPP$surf,main="True IPPP intensity surface for the locations")
 #' genMPP=newMPP$genMPP
@@ -354,7 +358,7 @@ plot_MPP_probs <- function(MPPfit,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #plot_MPP_fields}
 #'
 #' @param MPP A marked point pattern as an
@@ -384,8 +388,7 @@ plot_MPP_probs <- function(MPPfit,
 #' @seealso \code{\link{rMIPPP_cond_loc}}
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5), r=.5)
 #' plot(newMPP$surf,main="True IPPP intensity surface for the locations")
 #' plot_MPP_fields(newMPP$genMPP,newMPP$gammas,newMPP$r)
@@ -473,7 +476,7 @@ plot_MPP_fields <- function(MPP,gammas,r,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rMIPPP_cond_loc}
 #'
 #' @param surf An object of type \code{intensity_surface} representing the
@@ -605,8 +608,7 @@ plot_MPP_fields <- function(MPP,gammas,r,
 #' @author Sakis Micheas
 #' @seealso \code{\link{plot_MPP_fields}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # Create a marked point pattern; use randomization and discrete marks (default values)
 #' newMPP=rMIPPP_cond_loc()
 #' plot(newMPP$surf,main="True IPPP intensity surface for the locations")
@@ -1017,7 +1019,7 @@ summary.MIPPP_fit <- function(object,...)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rMIPPP_cond_mark}
 #'
 #' @param lambda Average number of mark values
@@ -1085,8 +1087,7 @@ summary.MIPPP_fit <- function(object,...)
 #' @author Sakis Micheas
 #' @seealso \code{\link{plotmix_2d}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # Create a marked point pattern; use randomization and 2 discrete uniform
 #' # marks (default values)
 #' newMPP=rMIPPP_cond_mark(bigwin = spatstat::owin(c(-10,10),c(-10,10)))
@@ -1207,7 +1208,7 @@ rMIPPP_cond_mark<- function(
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #est_MIPPP_cond_mark}
 #'
 #' @param pp Marked point pattern of class \code{\link[spatstat]{ppp}}.
@@ -1241,7 +1242,8 @@ rMIPPP_cond_mark<- function(
 #' For continuous marks set this to FALSE.
 #' @param LL Length of the side of the square grid.
 #' @param open_new_window Open a new window for a plot.
-#' @param show_plots Logical variable requesting to produce the probability field plots for each mark.
+#' @param show_plots Logical variable requesting to produce the ground fits and probability field plots for each mark. If label switching is present, the MAPE surface is computed and returned, otherwise the PME.
+#' @param compute_surfaces Logical to request computation of the Average of Surfaces (if \code{m} is a vector) or the Bayesian Model Average (if \code{m} is an integer or missing). Default is TRUE. This is a SLOW operation.
 #' @return An object of class \code{MIPPP_fit}, which is simply a list containing the following components:
 #' \item{gen_mark_ps}{The posterior realizations of the discrete mark distribution probabilities.}
 #' \item{mark_dist}{The posterior means of the discrete mark distribution probabilities.}
@@ -1257,30 +1259,29 @@ rMIPPP_cond_mark<- function(
 #' @seealso \code{\link{rMIPPP_cond_mark}},
 #' \code{\link{GetStats}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' #Create a marked point pattern; use randomization and 3 discrete marks
 #' newMPP=rMIPPP_cond_mark( params=c(.2,.5,.3),bigwin = spatstat::owin(c(-10,10),c(-10,10)))
 #' newMPP$params
 #' #supply the true number of components for each ground process
 #' m=c(newMPP$groundsurfs[[1]]$m, newMPP$groundsurfs[[2]]$m, newMPP$groundsurfs[[3]]$m)
-#' MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=m)
+#' MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=m,compute_surfaces=FALSE)
 #' #check out the mark distribution parameters
 #' #posterior means
 #' MIPPPfit$mark_dist
 #' #credible sets
-#' GetStats(MIPPPfit$gen_mark_ps[,1])#should contain .2
-#' GetStats(MIPPPfit$gen_mark_ps[,2])#should contain .5
-#' GetStats(MIPPPfit$gen_mark_ps[,3])#should contain .3
+#' GetStats(MIPPPfit$gen_mark_ps[,1])$CredibleSet#should contain .2
+#' GetStats(MIPPPfit$gen_mark_ps[,2])$CredibleSet#should contain .5
+#' GetStats(MIPPPfit$gen_mark_ps[,3])$CredibleSet#should contain .3
 #' #now pretend we do not know the truth as is usually the case. Supply an integer
 #' #for m so that the routine will fit a BDMCMC with this as the max number of
 #' #components and use the MAP number of components
-#' MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=7)
+#' MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=7,compute_surfaces=FALSE)
 #' #check out the mark distribution parameters
 #' MIPPPfit$mark_dist
-#' GetStats(MIPPPfit$gen_mark_ps[,1])#should contain .2
-#' GetStats(MIPPPfit$gen_mark_ps[,2])#should contain .5
-#' GetStats(MIPPPfit$gen_mark_ps[,3])#should contain .3}
+#' GetStats(MIPPPfit$gen_mark_ps[,1])$CredibleSet#should contain .2
+#' GetStats(MIPPPfit$gen_mark_ps[,2])$CredibleSet#should contain .5
+#' GetStats(MIPPPfit$gen_mark_ps[,3])$CredibleSet#should contain .3}
 #'
 #' @export
 est_MIPPP_cond_mark <- function(pp,m=10, L = 50000,
@@ -1288,7 +1289,8 @@ est_MIPPP_cond_mark <- function(pp,m=10, L = 50000,
                                 fit_markdist=TRUE,
                                 truncate = FALSE,grayscale = FALSE,
                                 discrete_mark = TRUE, LL = 256,
-                                open_new_window = FALSE, show_plots = TRUE)
+                                open_new_window = FALSE, show_plots = TRUE,
+                                compute_surfaces = TRUE)
 {
   if(!discrete_mark) {
     stop("Option not implemented yet.")
@@ -1351,16 +1353,22 @@ est_MIPPP_cond_mark <- function(pp,m=10, L = 50000,
       fitsDA[[k]]<-est_mix_damcmc(pattern, m[k], hyper_da = hyper_da[[k]], L =L,
                                   truncate = truncate)
       fitsDA[[k]]=drop_realization(fitsDA[[k]],drop=burnin)
-      fitsAoS[[k]]=plot_avgsurf(
-        fitsDA[[k]],win = fitsDA[[k]]$data$window,
-        LL = 100,burnin =0,zlims = c(0, 0),
-        grayscale = grayscale,showplot = FALSE)
+      if(compute_surfaces)
+        fitsAoS[[k]]=plot_avgsurf(
+          fitsDA[[k]],win = fitsDA[[k]]$data$window,
+          LL = 100,burnin =0,zlims = c(0, 0),
+          grayscale = grayscale,showplot = FALSE)
+      else
+        fitsAoS[[k]]=NULL
     }
     else
     {
       BDMCMCfit=est_mix_bdmcmc(pp=pattern,m=m,L=L,
                                  hyper = hyper_da[[k]],truncate = truncate)
-      fitsAoS[[k]]=GetBMA(BDMCMCfit,LL=100)
+      if(compute_surfaces)
+        fitsAoS[[k]]=GetBMA(BDMCMCfit,LL=100)
+      else
+        fitsAoS[[k]]=NULL
       BDMCMCfit=drop_realization(BDMCMCfit,drop=burnin)
       #now we drop the bad realizations
       BDMCMCfit=drop_realization(BDMCMCfit,(BDMCMCfit$Badgen==1))
@@ -1377,9 +1385,11 @@ est_MIPPP_cond_mark <- function(pp,m=10, L = 50000,
       test_label <- check_labels(fitsDA[[k]], showmessages = FALSE,lagnum = 10)
       if(test_label)
       {
-        cat("\nLabel switching present for mark",k,"(permuting labels, please wait...)\n")
-        fixed_real <- FixLS_da(fitsDA[[k]], burnin = 0,approx = FALSE, run_silent = TRUE)
-        post_surf[[k]] <- GetPMEst(fixed_real, burnin = 0)
+        cat("\nLabel switching present for mark",k,
+            "(computing the MAPE surface, please wait...)\n")#(permuting labels, please wait...)\n")
+        #fixed_real <- FixLS_da(fitsDA[[k]], burnin = 0,approx = FALSE, run_silent = TRUE)
+        #post_surf[[k]] <- GetPMEst(fixed_real, burnin = 0)
+        post_surf[[k]] <- GetMAPEst(fitsDA[[k]], burnin = 0)
       } else
       {
         cat("\nNo label switching detected for mark",k,"\n")

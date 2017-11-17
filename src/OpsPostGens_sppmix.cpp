@@ -1,8 +1,78 @@
 #include "sppmix.h"
-//Written by Sakis Micheas, 2015
+//Written by Sakis Micheas, 2017
 //Operations on posterior realizations
 //used by cpp and R functions
-//visible in the package only, 16 functions
+//visible in the package only
+
+//[[Rcpp::export]]
+vec GetPriorVals_sppmix(mat const& pp,
+    List const& allgens,
+    int const& priortype,
+    vec const& d,vec const& mu0,
+    mat const& Sigma0,
+    int const& df0,
+    double const& sig0)
+{
+//for each realization, compute and return the
+//prior density at those values
+  int i,j,k,L=allgens.size();
+  List mix1=allgens[0];
+  int m=mix1.size(),n=pp.n_rows;
+  mat allps=GetAllRealiz_ps_sppmix(allgens);
+  List allmus=GetAllRealiz_mus_sppmix(allgens);
+  List allsigmas=GetAllRealiz_sigmas_sppmix(allgens);
+//  pattern <- cbind(pp$x,pp$y)
+  vec priorvals(L),
+    ppx=pp.col(0),ppy=pp.col(1);
+  double Rx=arma::max(ppx)-arma::min(ppx),
+    Ry=arma::max(ppy)-arma::min(ppy);
+  vec ksi(2);
+  ksi(0)=arma::mean(ppx);
+  ksi(1)=arma::mean(ppy);
+  mat kappa(2,2),kappainv(2,2),Idenmat(2,2);
+  Idenmat(0,1)=0;
+  Idenmat(1,0)=0;
+  Idenmat(0,0)=1;
+  Idenmat(1,1)=1;
+  kappa(0,1)=0;
+  kappa(1,0)=0;
+  kappa(0,0)=100/(Rx*Rx);
+  kappa(1,1)=100/(Ry*Ry);
+  kappainv(0,1)=0;
+  kappainv(1,0)=0;
+  kappainv(0,0)=Rx*Rx/100;
+  kappainv(1,1)=Ry*Ry/100;
+//  mat sumxmu=zeros(2,2);
+//  for(k=0;k<n;k++)
+//    sumxmu=sumxmu+(pp.row(k).t()-ksi)*(pp.row(k)-ksi.t());
+  mat ps2=//invmat2d_sppmix(
+    sig0*sig0*Idenmat;//);//+sumxmu/(n-1));
+  for(i=0;i<L;i++)
+  {
+  //  Rprintf("\rComputing prior values... %3.1f%% complete",100.0*(i+1)/L);
+    vec cur_ps=allps.row(i).t();//GetRealiz_ps_sppmix(allgens,i);
+    mat cur_mus=allmus[i];//GetRealiz_mus_sppmix(allgens,i);
+    mat cur_sigmas=allsigmas[i];//GetRealiz_sigmas_sppmix(allgens,i);
+    double dnorm=dDirichlet_sppmix(cur_ps,d),dwish=1;
+    for(j=0;j<m;j++)
+    {
+      vec mu1=cur_mus.row(j).t();
+      vec sig1=cur_sigmas.row(j).t();
+      mat W(2,2);
+      W(0,0)=sig1(0);
+      W(0,1)=sig1(1);
+      W(1,0)=sig1(2);
+      W(1,1)=sig1(3);
+      dnorm*=dNormal_sppmix(
+        mu1,ksi,kappainv);
+      dwish*=dInvWishart_sppmix(
+          W,df0,ps2);
+    }
+    priorvals(i)=dnorm*dwish;
+  }
+//  Rprintf("\rDone                                               ");
+  return(priorvals);
+}
 
 // [[Rcpp::export]]
 List GetStats_sppmix(vec const& gens,
@@ -262,6 +332,7 @@ List PostGenGetBestPerm_sppmix(List const& allgens)
         }
       }
       current_perm.row(i)=allperms.row(minindex);//GetAPermutation_sppmix(m,minindex).t();
+      Rcpp::checkUserInterrupt();
     }
 
     for(i=0;i<L;i++)
@@ -725,6 +796,7 @@ List GetDensityValues_sppmix(
   //(fit object) from DAMCMCExtras
   //apply burnin before calling this function
   //GetDensityValues_sppmix(as.matrix(genPPP$x,genPPP$y,genPPP$n,2),drop_realization(fit))
+//  Rcout <<"start"<<std::endl ;
   int i,j,dat;
   List allgens_List=fit[0];
   int L=allgens_List.size();
@@ -757,6 +829,8 @@ List GetDensityValues_sppmix(
     sumxmu=sumxmu+trans(data.row(r)-ksi.t())*(data.row(r)-ksi.t());
   mat ps2=invmat2d_sppmix(2*Idenmat+sumxmu/(n-1));
 */
+//  Rcout <<"data"<<data<<std::endl ;
+
   vec xy(2),mu1(2),genlambdas=fit[5],
      Density(L),logDensity(L);
   cube CompDensityAtXi(n,m,L);
@@ -778,8 +852,10 @@ List GetDensityValues_sppmix(
   mat allps=GetAllRealiz_ps_sppmix(allgens_List);
   List allmus=GetAllRealiz_mus_sppmix(allgens_List);
   List allsigmas=GetAllRealiz_sigmas_sppmix(allgens_List);
+//  Rprintf("\nComputing density values...\n");
   for(i=0;i<L;i++)
   {
+//    Rprintf("\rWorking: %3.1f%% complete",100.0*i/(L-1));
     //sample from prior
 //    prior_ps=rDirichlet_sppmix(ones(m));
 //    Rcout <<prior_ps<<std::endl ;
@@ -855,16 +931,20 @@ List GetDensityValues_sppmix(
 //      sumdev+=-2*log(Density(i));
     sumdev+=-2*logDensity(i);
 //    Rcout <<"\nsumdev"<<sumdev<<"\n"<< std::endl ;
+    Rcpp::checkUserInterrupt();
   }
 //  double deviance_MCapprox=sumdev/L;
 //  Rcout <<"\ndeviance_MCapprox"<<deviance_MCapprox<<"\n"<< std::endl ;
   //  Rcout <<"\nComputing the Entropy\n"<< std::endl ;
+//  Rprintf("\rDone.                    ");
 
   double likMAP=0//,likAvg=0//,entropy=0,
   //  entropyavg=0
   ,entropyMAP=0;
+//  Rprintf("\rComputing the entropy value...\n");
   for(dat=0;dat<n;dat++)
   {
+//    Rprintf("\rWorking: %3.1f%% complete",100.0*dat/(n-1));
     double maxdens=-1;//max works better
     double avgdens=0;//average surface
 //    int ind_maxdens=-1;
@@ -902,6 +982,7 @@ List GetDensityValues_sppmix(
 //    entropy+=-entropysum;
 //    entropyavg+=-entropysum1;
   }
+//  Rprintf("\rDone.                    ");
 
   double loglikelihoodMAP=n*log(meanlamda)-meanlamda-lognfac+likMAP;
 //  double loglikelihoodAvg=n*log(meanlamda)-meanlamda-lognfac+likAvg;

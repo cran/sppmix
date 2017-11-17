@@ -21,20 +21,16 @@ of a point belonging to a component.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_true_labels}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-3, 3), ylim = c(-3, 3))
 intsurf=to_int_surf(truemix, lambda = 100, win =spatstat::owin( c(-3, 3),c(-3, 3)))
 pp1 <- rsppmix(intsurf,FALSE)
 plot_true_labels(pp1)}
 
-}
-\author{
-Sakis Micheas
 }
 \seealso{
 \code{\link{rnormmix}},
@@ -42,4 +38,6 @@ Sakis Micheas
 \code{\link[spatstat]{owin}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

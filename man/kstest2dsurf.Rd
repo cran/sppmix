@@ -25,12 +25,11 @@ test for a point pattern against a given intensity surface.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #kstest2dsurf}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # generate two intensity surfaces; assume the same window [-3,3]x[-3,3]
 mixsurf1 <- rmixsurf(m = 3, lambda=100,xlim=c(-3,3),ylim=c(-3,3))
 plot(mixsurf1)
@@ -50,13 +49,12 @@ kstest2dsurf(pp2, mixsurf2)#correct model for pp2
 kstest2dsurf(pp2, mixsurf1)#wrong model for pp2}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rmixsurf}},
 \code{\link{kstest2d}},
 \code{\link{rsppmix}},
 \code{\link{plotmix_2d}}
 }
-
+\author{
+Sakis Micheas
+}

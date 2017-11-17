@@ -22,20 +22,18 @@ of a point belonging to a component.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_ind}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_damcmc(pp = spatstat::redwood, m = 10)
 plot_ind(fit)}
 
 }
-\author{
-Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{est_mix_damcmc}}
 }
-
+\author{
+Sakis Micheas, Yuchen Wang
+}

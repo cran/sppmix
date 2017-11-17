@@ -10,7 +10,7 @@ PlotUSAStates(showcounties = FALSE, states = "Missouri",
   main = "States (true levels)", guidemain = "Level",
   discretelevels = TRUE, levels = 1:3, showplot = TRUE,
   plotlevels = TRUE, marks, pp, surf, boundarycolor = "black",
-  namescolor = "black")
+  namescolor = "black", ppsize = 1)
 }
 \arguments{
 \item{showcounties}{Logical to denote that we want a plot of counties.
@@ -97,6 +97,8 @@ Default is "black". Set to \code{NULL} if you do not want boundaries drawn.}
 \item{namescolor}{A specific color to use
 for drawing the state or county names when
 \code{plotnames=TRUE}. Default is "black".}
+
+\item{ppsize}{Size used in plotting the points. Default is 1.}
 }
 \value{
 A list containing the following components:
@@ -114,16 +116,15 @@ for visualization of geostatistical data, in particular,
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #PlotUSAStates}
 }
 \details{
-Note that we use the state and county longitude and latitude boundaries from
-the \code{\link[USAboundaries]{USAboundaries}} package.
+Note that we use the state and county longitude and latitude boundaries in
+the \code{\link{USAStatesCounties2016}} object.
 }
 \examples{
-
-\dontrun{
+\donttest{
 #plot the continental USA with uniformly sampled discrete marks from 10 different levels
 ret=PlotUSAStates(states=ContinentalUSA_state_names, levels=1:10, grayscale = FALSE,
  shownames=TRUE, plotlevels =TRUE, discretelevels=TRUE, main="Continental USA (generated levels)")
@@ -211,9 +212,6 @@ ret=PlotUSAStates(showcounties=TRUE, states=c('Missouri'),
  boundarycolor="gray", pp=MPP, surf=BMAest)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_MIPPP_cond_loc}},
 \code{\link{est_mix_damcmc}},
@@ -227,4 +225,6 @@ Sakis Micheas
 \code{\link{plot_MPP_probs}},
 \code{\link{GetMAPEst}}
 }
-
+\author{
+Sakis Micheas and Jiaxun Chen
+}

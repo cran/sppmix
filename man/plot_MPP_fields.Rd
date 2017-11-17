@@ -48,12 +48,11 @@ mark value at that location.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_MPP_fields}
 }
 \examples{
-
-\dontrun{
+\donttest{
 newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5), r=.5)
 plot(newMPP$surf,main="True IPPP intensity surface for the locations")
 plot_MPP_fields(newMPP$genMPP,newMPP$gammas,newMPP$r)
@@ -62,10 +61,9 @@ plot_MPP_fields(newMPP$genMPP,newMPP$gammas,1.5)
 plot_MPP_fields(newMPP$genMPP,newMPP$gammas,2)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rMIPPP_cond_loc}}
 }
-
+\author{
+Sakis Micheas
+}

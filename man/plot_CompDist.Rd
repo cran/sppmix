@@ -18,22 +18,20 @@ of the number of components.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_CompDist}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fitBD <- est_mix_bdmcmc(spatstat::redwood, m = 10)
 plot_CompDist(fitBD)
 CAfitBD=est_mix_bdmcmc(pp = CAQuakes2014.RichterOver3.0, m = 10)
 plot_CompDist(CAfitBD)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_bdmcmc}}
 }
-
+\author{
+Sakis Micheas
+}

@@ -22,12 +22,11 @@ each of the discrete marks at that location.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_MPP_probs}
 }
 \examples{
-
-\dontrun{
+\donttest{
 newMPP=rMIPPP_cond_loc(gammas=c(.1,.2,.5))
 plot(newMPP$surf,main="True IPPP intensity surface for the locations")
 genMPP=newMPP$genMPP
@@ -36,11 +35,10 @@ mpp_est <- est_MIPPP_cond_loc(genMPP,newMPP$r, hyper=0.2)
 plot_MPP_probs(mpp_est)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rMIPPP_cond_loc}},
 \code{\link{est_MIPPP_cond_loc}}
 }
-
+\author{
+Sakis Micheas
+}

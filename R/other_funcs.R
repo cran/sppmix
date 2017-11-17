@@ -340,15 +340,14 @@ GetMixtureLimitsList<- function(mix)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #openwin_sppmix}
 #'
 #' @param check2open Logical: TRUE to open a newplot, FALSE do not open.
 #' @details This function is used by almost all plotting functions of the \code{\link{sppmix}} package.
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' openwin_sppmix(TRUE)}
 #'
 #' @export
@@ -411,7 +410,7 @@ MakeMixtureListFromNormMix<- function(norm_mix)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Demo_sppmix}
 #'
 #' @param whichdemo A number indicating which
@@ -420,8 +419,7 @@ MakeMixtureListFromNormMix<- function(norm_mix)
 #'
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' Demo_sppmix()#shows all available demos and opens the vignettes page
 #' Demo_sppmix(1)#demo on sppmix objects}
 #'
@@ -489,8 +487,7 @@ Demo_sppmix<-function(whichdemo=NULL)
 #' @param str A string to display.
 #' @rdname helper_functions
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' plotstring()}
 #'
 #' @export
@@ -510,7 +507,7 @@ plotstring <- function(str="Hello World") {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #MaternCov}
 #'
 #' @param grid An \code{nx2} matrix of locations
@@ -532,8 +529,7 @@ plotstring <- function(str="Hello World") {
 #' the Matern for nu=.5 reduces to the exponential.
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' grid=cbind(seq(0,1,length=10), seq(0,1,length=10))
 #' MaternCov(grid)}
 #'
@@ -565,7 +561,7 @@ MaternCov=function(grid,nu=.5,theta=1,sig=1)
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #rGRF}
 #'
 #' @param mu Mean of the stationary GRF.
@@ -616,8 +612,7 @@ MaternCov=function(grid,nu=.5,theta=1,sig=1)
 #' and \code{ylims}.
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' #Gaussian random field as an image
 #' GRF1=rGRF()
 #' p<-plot_density(as.data.frame(GRF1))

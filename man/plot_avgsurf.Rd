@@ -41,12 +41,11 @@ which is obtained by \code{\link{GetPMEst}}.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_avgsurf}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-1, 1), ylim =c(0, 3))
 trueintsurf=to_int_surf(truemix, lambda = 200, win =spatstat::owin( c(-1, 1),c(0, 3)))
 plot(trueintsurf, main = "True Poisson intensity surface (mixture of normal components)")
@@ -81,9 +80,6 @@ plotmix_3d(avgsurf,title1 = paste("Average of", .9*postfit$L,
  "posterior realizations of the intensity surface"))}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \seealso{
 \code{\link{rnormmix}},
 \code{\link{to_int_surf}},
@@ -95,4 +91,6 @@ Jiaxun Chen, Sakis Micheas
 \code{\link{plotmix_3d}},
 \code{\link{GetPMEst}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

@@ -31,12 +31,11 @@ explore the parameter space adequately).
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_autocorr}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 plot(truemix_surf)
 genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -46,12 +45,11 @@ plot_autocorr(fit$genps[,2])
 plot_autocorr(fit$genps[,3])}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_damcmc}},
 \code{\link{rmixsurf}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

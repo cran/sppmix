@@ -1,8 +1,71 @@
 #include "sppmix.h"
-//Written by Sakis Micheas, 2015
+//Written by Sakis Micheas, 2017
 //helper functions only, used by cpp and R functions
-//visible in the package only, 24 functions
+//visible in the package only
 
+// [[Rcpp::export]]
+double TriangleArea(vec const& a,
+                    vec const& b,
+                    vec const& c)
+{
+return 0.5*((b(0)-a(0))*(c(1)-a(1))-
+  (b(1)-a(1))*(c(0)-a(0)));
+}
+
+// [[Rcpp::export]]
+int CheckTriangleCLockwise(vec const& a,
+                    vec const& b,
+                    vec const& c)
+{
+  double area=TriangleArea(a,b,c);
+  if (area < 0.0) return (-1);//clockwise
+  else if (area > 0.0) return (+1);//counterclockwise
+  return(0);
+}
+
+// [[Rcpp::export]]
+bool CheckInPoly(mat const& poly,
+                vec const& xy)
+{
+  //check is x is in poly
+  //poly is an nx2 matrix of vertices
+  //counterclockwise
+  int i,n=poly.n_rows,crossings = 0;
+  vec x=poly.col(0),y=poly.col(1);
+  for (i=0;i<n-1;i++)
+  {
+    double slope=(y(i+1)-y(i))/(x(i+1)-x(i));
+    bool cond1=(x(i)<=xy(0))&&(xy(0)<x(i+1));
+    bool cond2=(x(i+1)<=xy(0))&&(xy(0)<x(i));
+    bool above=(xy(1)<slope*(xy(0)-x(i))+y(i));
+    if ((cond1 || cond2)  && above ) crossings++;
+  }
+  bool check=(crossings % 2 != 0 );
+  return (check);
+}
+
+// [[Rcpp::export]]
+double MatrixNorm(mat const& M,double const& p)
+{
+  double val=0;
+  if(p<1)
+    stop("Wrong power value");
+  int i,j,nrow=M.n_rows,ncol=M.n_cols;
+  for(i=0;i<nrow;i++)
+    for(j=0;j<ncol;j++)
+      val=val+powf(fabs(M(i,j)),p);
+  return (powf(val,1.0/p));
+}
+
+// [[Rcpp::export]]
+double MatTrace(mat const& M)
+{
+  double val=0;
+  int i,nrow=M.n_rows;
+  for(i=0;i<nrow;i++)
+    val=val+M(i,i);
+  return (val);
+}
 
 // [[Rcpp::export]]
 double Quad_sppmix(vec const& v,mat const& m)
@@ -504,4 +567,26 @@ double dNormal_sppmix(vec const& atx,vec const& mu,
 //return val;
 }
 
+// [[Rcpp::export]]
+double MultGamma(int const& p,
+                 int const& n)
+{
+  int i;
+  double sum1=0;
+  for(i=0;i<p;i++)
+    sum1=sum1+logGammaFunc_sppmix((n-1)/2-i/2);
+  return (exp((p*(p-1)/4)*log(datum::pi)+sum1));
+}
 
+// [[Rcpp::export]]
+double dInvWishart_sppmix(
+    mat const& W,double const& df,
+    mat const& alpha)
+{
+  int i,p=W.n_rows;
+  double dens,const1=
+    powf(arma::det(alpha),0.5*df)*
+    powf(2.0,-df*0.5*p)/MultGamma(p,0.5*df);
+  dens=const1*powf(det(W),-0.5*(df+p+1))*exp(-0.5*MatTrace(alpha*invmat2d_sppmix(W)));
+  return(dens);
+}

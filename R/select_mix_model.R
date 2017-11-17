@@ -15,7 +15,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #selectMix}
 #'
 #' @param pp Point pattern object of class \code{ppp}.
@@ -77,8 +77,7 @@
 #' \code{\link{FixLS_da}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # create the true mixture intensity surface
 #' truesurf <- normmix(ps=c(.2, .6,.2), mus=list(c(0.3, 0.3), c(0.7, 0.7), c(0.5, 0.5)),
 #'  sigmas = list(.01*diag(2), .01*diag(2), .01*diag(2)), lambda=100, win=spatstat::square(1))

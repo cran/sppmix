@@ -24,12 +24,11 @@ Standard 2d plot for a spatial point pattern.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot2dPP}
 }
 \examples{
-
-\dontrun{
+\donttest{
 mix1 <- rnormmix(5, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 intsurf1=to_int_surf(mix1, lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
 pp1 <- rsppmix(intsurf1)
@@ -37,13 +36,12 @@ plot2dPP(pp1)
 plot2dPP(pp1, mus = intsurf1$mus)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}},
 \code{\link[spatstat]{owin}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

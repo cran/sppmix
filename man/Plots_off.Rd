@@ -11,19 +11,17 @@ The function closes all Rgl plots, as well as, any graphics devices.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Plots_off}
 }
 \examples{
-
-\dontrun{
+\donttest{
 Plots_off()}
 
-}
-\author{
-Sakis Micheas
 }
 \seealso{
 \code{\link{Save_AllOpenRglGraphs}}
 }
-
+\author{
+Sakis Micheas
+}

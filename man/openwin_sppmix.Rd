@@ -17,19 +17,17 @@ in the R GUI the plots will be overwritten if you don't open a new device.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #openwin_sppmix}
 }
 \details{
 This function is used by almost all plotting functions of the \code{\link{sppmix}} package.
 }
 \examples{
-
-\dontrun{
+\donttest{
 openwin_sppmix(TRUE)}
 
 }
 \author{
 Sakis Micheas
 }
-

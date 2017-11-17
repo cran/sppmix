@@ -33,12 +33,11 @@ with mixture intensity of normal components.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot.intensity_surface}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- rnormmix(m = 5, sig0 = .1, df = 5, xlim= c(-1, 5), ylim =c(2, 5))
 intsurf=to_int_surf(truemix, lambda = 200, win =spatstat::owin( c(-1, 5),c(2, 5)))
 plot(intsurf,main = "True Poisson intensity surface (mixture of normal components)")
@@ -49,11 +48,10 @@ summary(demo_intsurf)
 plot(demo_intsurf,main = "True Poisson intensity surface (mixture of normal components)")}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

@@ -28,12 +28,11 @@ Prints a brief summary of the results of a DAMCMC fit.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #summary.damcmc_res}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # generate data
 truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 summary(truemix)
@@ -45,9 +44,6 @@ postfit=est_mix_damcmc(pp1,m=3)
 summary(postfit)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{rnormmix}},
 \code{\link{to_int_surf}},
@@ -55,4 +51,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{est_mix_damcmc}},
 \code{\link[spatstat]{owin}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

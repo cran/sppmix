@@ -5,7 +5,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #approx_normmix}
 #'
 #' @param mix An object of class \code{normmix}
@@ -18,12 +18,9 @@
 #' @seealso \code{\link{normmix}}
 #' @author Jiaxun Chen, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix = normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2),
 #'  c(.8, .8)), sigmas =list(.01*diag(2),.01*diag(2)))
-#' summary(truemix)
-#' approx_normmix(truemix,xlim= c(0, 1), ylim = c(0, 1))
 #' approx_normmix(truemix,xlim= c(-2, 2), ylim = c(-2, 2))}
 #'
 #' @export
@@ -57,7 +54,7 @@ approx_normmix <- function(mix, xlim = c(0, 1), ylim = c(0, 1)) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #dnormmix}
 #'
 #' @param mix An object of class \code{normmix} or \code{intensity_surface}
@@ -82,11 +79,9 @@ approx_normmix <- function(mix, xlim = c(0, 1), ylim = c(0, 1)) {
 #'
 #' @author Jiaxun Chen, Sakis Micheas, Yuchen Wang
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix <- rnormmix(m = 3, sig0 = .1, df = 5,xlim= c(0, 5),
 #'  ylim = c(0, 5))
-#' summary(truemix)
 #' normdens=dnormmix(truemix,xlim= c(0, 5), ylim = c(0, 5))
 #' #2d plots
 #' plot_density(as.data.frame(normdens))+ ggplot2::ggtitle(
@@ -150,7 +145,7 @@ dnormmix <- function(mix, xlim = c(0, 1), ylim = c(0, 1), L = 128,
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #GetBMA}
 #'
 #' @param fit Object of class \code{bdmcmc_res}.
@@ -161,8 +156,7 @@ dnormmix <- function(mix, xlim = c(0, 1), ylim = c(0, 1), L = 128,
 #' \code{\link{plotmix_3d}},
 #' \code{\link{plot_density}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit=est_mix_bdmcmc(pp = spatstat::redwood, m = 5)
 #' BMA=GetBMA(fit)
 #' burnin=.1*fit$L

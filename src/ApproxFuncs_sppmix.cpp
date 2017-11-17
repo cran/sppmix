@@ -50,6 +50,7 @@ vec const& ylims,mat const& approxcomp)
         AvgPostIntensity(x1,y1)=AvgPostIntensity(x1,y1)+intensityatxy/(L-burnin);
       }
       countiter++;
+      Rcpp::checkUserInterrupt();
     }
     Rprintf("\rDone                                                      \n");
   return AvgPostIntensity;
@@ -325,6 +326,7 @@ mat ApproxBayesianModelAvgIntensity_sppmix(
     }
     weight=distr_numcomp(kval);
     AvgPostIntensity=AvgPostIntensity+weight*PostIntensity;
+    Rcpp::checkUserInterrupt();
   }
   Rprintf("\rDone                                                                     \n");
   return AvgPostIntensity;

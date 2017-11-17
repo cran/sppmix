@@ -26,21 +26,17 @@ so we do not have to it individually.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_convdiags}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 plot(truemix_surf)
 genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
 fit = est_mix_damcmc(pp = genPPP, m = 3)
 plot_convdiags(fit)}
 
-}
-\author{
-Sakis Micheas
 }
 \seealso{
 \code{\link{est_mix_damcmc}},
@@ -49,4 +45,6 @@ Sakis Micheas
 \code{\link{plot_autocorr}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Sakis Micheas
+}

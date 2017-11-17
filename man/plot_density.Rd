@@ -5,7 +5,7 @@
 \title{Plots a density or image}
 \usage{
 plot_density(density_df, contour = FALSE, grayscale = FALSE, pp = NULL,
-  surf = NULL, main = "2d surface (density or intensity)")
+  surf = NULL, ppsize = 1, main = "2d surface (density or intensity)")
 }
 \arguments{
 \item{density_df}{A data frame. Typically density_df=as.data.frame(imdens), where imdens an \code{\link[spatstat]{im}} object.}
@@ -18,6 +18,8 @@ plot_density(density_df, contour = FALSE, grayscale = FALSE, pp = NULL,
 
 \item{surf}{Optional \code{intensity_surface} object containing means to be displayed in the plot.}
 
+\item{ppsize}{Size of the points in the plot.}
+
 \item{main}{A title for the 2d plot.}
 }
 \description{
@@ -26,15 +28,14 @@ image object.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot_density}
 }
 \details{
 This function does not open a new window for the plot.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # plot a mixture of normals density
 truemix <- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 summary(truemix)
@@ -45,10 +46,9 @@ plot_density(normdens, main="2d mixture density plot\\nWindow=[0,5]x[0,5]")
 plot_density(normdens, contour=TRUE, main="2d mixture contour plot\\nWindow=[0,5]x[0,5]")}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{dnormmix}}
 }
-
+\author{
+Sakis Micheas
+}

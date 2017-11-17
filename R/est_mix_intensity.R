@@ -12,12 +12,12 @@
 #'
 #' For DAMCMC examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #est_mix_damcmc}
 #'
 #' For BDMCMC examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #est_mix_bdmcmc}
 #'
 #' @param pp Point pattern object of class \code{\link[spatstat]{ppp}}.
@@ -29,6 +29,7 @@
 #' in the point pattern \code{pp}.
 #' @param L Number of iterations for the DAMCMC (default is 10000) or BDMCMC (default is 30000). If the value passed is less than the default, then it is set to the default value.
 #' @param hyper_da Hyperparameters for DAMCMC, default is (3, 1, 1).
+#' @param useKmeans Logical variable. If TRUE use a kmeans clustering method to obtain the starting values for the component means, otherwise, randomly sample a point from the pattern and use it as a component mean.
 #' @return An object of type \code{damcmc_res}, containing MCMC realizations.
 #' \item{allgens_List}{A list of size \code{L} containing posterior realizations, with elements that are lists of size \code{m}, with each element being the posterior realization of the parameters of a component, i.e., \code{p}, \code{mu} and \code{sigma}.}
 #' \item{genps}{An \code{Lxm} matrix containing the L posterior realizations of the m component probabilities of the normal mixture.}
@@ -66,8 +67,7 @@
 #' \code{\link{FixLS_da}},
 #' \code{\link{rnormmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fit <- est_mix_damcmc(spatstat::redwood, m = 3)
 #' fit
 #' plot(fit)
@@ -96,19 +96,17 @@
 #'
 #' @export
 est_mix_damcmc <- function(pp, m, truncate = FALSE,
-                           L = 10000, hyper_da = c(3, 1, 1))
+                           L = 10000, hyper_da = c(3, 1, 1),
+                           useKmeans=FALSE)
 {
-  if(L<10000)
-  {
-    warning("Number of realizations is less than 10k. Setting it to 10k.")
-    L=10000
-  }
+  #if(L<10000)  {    warning("Number of realizations is less than 10k. Setting it to 10k.");L=10000  }
   # Start the clock!
   ptm1 <- proc.time()
   fit <- DAMCMC2d_sppmix(points = cbind(pp$x, pp$y),
                          xlims = Window(pp)$xrange, ylims = Window(pp)$yrange,
                          m = m, truncate = truncate,
-                         L = L, hyperparams = hyper_da)
+                         L = L, hyperparams = hyper_da,
+                         useKmeans=useKmeans)
   # Stop the clock
   ptm<-proc.time() - ptm1
   cat(paste("\nComputation time in seconds:",ptm[[1]],"\n"))
@@ -150,8 +148,7 @@ print.damcmc_res <- function(x,...) {
 #' number of components-an alternative to reversible jump methods.
 #' The Annals of Statistics, 28, 1, 40-74.
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' fitBD <- est_mix_bdmcmc(spatstat::redwood, m = 5)
 #' fitBD
 #' plotsBDredwood=plot(fitBD)
@@ -243,11 +240,7 @@ est_mix_bdmcmc <- function(pp, m, truncate = FALSE,
                            lambda1 = 1, lambda2 = 10, hyper = c(m/2,1/36,3,2,1,1),
                            L = 30000)
 {
-  if(L<30000)
-  {
-    warning("Number of realizations is less than 30k. Setting it to 30k.")
-    L=30000
-  }
+#  if(L<10){warning("Number of realizations is very small. Setting it to 1000.");L=1000  }
   # Start the clock!
   ptm1 <- proc.time()
   fit <- BDMCMC2d_sppmix(m, points = cbind(pp$x, pp$y),
@@ -288,7 +281,7 @@ print.bdmcmc_res <- function(x,...) {
 #'
 #' For DAMCMC examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Get_Rdiag}
 #'
 #' @param pp Point pattern object of class \code{\link[spatstat]{ppp}}.
@@ -311,8 +304,7 @@ print.bdmcmc_res <- function(x,...) {
 #' \code{\link{rmixsurf}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' truemix_surf <- rmixsurf(m = 3, lambda=100, xlim = c(-3,3), ylim = c(-3,3))
 #' plot(truemix_surf)
 #' genPPP=rsppmix(intsurf = truemix_surf, truncate = FALSE)
@@ -397,4 +389,57 @@ Get_Rdiag_single<-function(chains)
   Varhat_plus=(L-1)*W/L+B/L
   R=sqrt(Varhat_plus/W)
   return(R)
+}
+
+#' @export
+est_mix_RMCPdamcmc <- function(
+  pp, m, truncate = FALSE,L = 10000,
+  d,mu0,Sigma0,df0,sig0,
+  useKmeans=TRUE,startmus)
+{
+#  if(L<10000){warning("Number of realizations is less than 10k. Setting it to 10k.")L=10000}
+  # Start the clock!
+  ptm1 <- proc.time()
+  if(missing(Sigma0))
+    Sigma0=stats::cov(cbind(pp$x,pp$y))
+  if(missing(mu0))
+    mu0=c(mean(pp$x),mean(pp$y))
+  if(missing(sig0))
+    sig0=1
+  if(missing(df0))
+    df0=10
+  if(missing(d))
+    d=rep(1,m)
+  if(length(d)!=m)
+    stop("d is not the same length as m")
+  if(!useKmeans)
+  {
+    if(missing(startmus))
+    {
+      startmus=matrix(0,m,2)
+      for(i in 1:m)
+      {
+        ind=sample(x=1:pp$n,size=1,replace=TRUE)
+        startmus[i,]=c(pp$x[ind],pp$y[ind])
+      }
+    }
+  }
+  fit <- DAMCMC2dRMCP_sppmix(
+    points = cbind(pp$x, pp$y),
+    xlims = Window(pp)$xrange,
+    ylims = Window(pp)$yrange,
+    m = m, L = L, truncate = truncate,
+    d=d,mu0=mu0,Sigma0=Sigma0,
+    df0=df0,sig0=sig0,
+    useKmeans=useKmeans,
+    startmus=startmus)
+  # Stop the clock
+  ptm<-proc.time() - ptm1
+  cat(paste("\nComputation time in seconds:",ptm[[1]],"\n"))
+  fit$data <- pp
+  class(fit$data) <- c("sppmix", "ppp")
+  fit$L <- L
+  fit$m <- m
+  class(fit) <- "damcmc_res"
+  return(fit)
 }

@@ -6,7 +6,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #kstest2d}
 #'
 #' @param x1,x2 Objects of class \code{\link[spatstat]{ppp}}.
@@ -23,8 +23,7 @@
 #' @author Jiaxun Chen, Sakis Micheas
 #' @seealso \code{\link{rnormmix}},\code{\link{to_int_surf}},\code{\link[spatstat]{owin}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate two point patterns
 #' mix1 <- rnormmix(3, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 #' intsurf1=to_int_surf(mix1,lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
@@ -107,7 +106,7 @@ kstest2d <- function(x1, x2,showinfo=TRUE) {
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #kstest2dsurf}
 #'
 #' @param pp Object of class \code{\link[spatstat]{ppp}}.
@@ -125,8 +124,7 @@ kstest2d <- function(x1, x2,showinfo=TRUE) {
 #' \code{\link{rsppmix}},
 #' \code{\link{plotmix_2d}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # generate two intensity surfaces; assume the same window [-3,3]x[-3,3]
 #' mixsurf1 <- rmixsurf(m = 3, lambda=100,xlim=c(-3,3),ylim=c(-3,3))
 #' plot(mixsurf1)

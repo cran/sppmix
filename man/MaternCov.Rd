@@ -25,7 +25,7 @@ Gaussian Random Fields (GRFs).
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #MaternCov}
 }
 \details{
@@ -40,16 +40,14 @@ modified Bessel function of second kind. Note that
 the Matern for nu=.5 reduces to the exponential.
 }
 \examples{
-
-\dontrun{
+\donttest{
 grid=cbind(seq(0,1,length=10), seq(0,1,length=10))
 MaternCov(grid)}
 
 }
-\author{
-Sakis Micheas
-}
 \seealso{
 \code{\link{rGRF}}
 }
-
+\author{
+Sakis Micheas
+}

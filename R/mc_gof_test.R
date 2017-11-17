@@ -7,7 +7,7 @@
 #'
 #' For examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #mc_gof}
 #'
 #' @param pp Point pattern object of class \code{ppp}.
@@ -28,8 +28,7 @@
 #' @seealso \code{\link{normmix}},
 #' \code{\link{rsppmix}}
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' # Create the intensity surface
 #' intsurf1 <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)), sigmas =
 #'  list(.01*diag(2), .01*diag(2)), lambda = 100, win = spatstat::square(1))
@@ -46,7 +45,7 @@
 #' mc_gof(pp1, intsurf2, 0.05)}
 #'
 #' @export
-mc_gof <- function(pp, intsurf, alpha, L = 20000, burnin = L/10,
+mc_gof <- function(pp, intsurf, alpha=0.5, L = 20000, burnin = floor(.1*L),
                    truncate = FALSE) {
   # check first
   if (L < 1000) {

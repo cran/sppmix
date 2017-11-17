@@ -10,4 +10,4 @@ vignette: >
 ---
 
 Since the html files for the tutorials (vignettes) were too large to be included with the distributed package on CRAN, we
-have placed them here: [Package Tutorials](http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_tutorial_links.html). See also the [sppmix Package Website](http://www.stat.missouri.edu/~amicheas/sppmix).
+have placed them here: [Package Tutorials](http://faculty.missouri.edu/~micheasa/sppmix/sppmix_tutorial_links.html). See also the [sppmix Package Website](http://faculty.missouri.edu/~micheasa/sppmix).

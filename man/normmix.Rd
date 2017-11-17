@@ -2,10 +2,10 @@
 % Please edit documentation in R/normmix.R
 \name{normmix}
 \alias{normmix}
-\alias{print.intensity_surface}
 \alias{print.normmix}
-\alias{summary.intensity_surface}
+\alias{print.intensity_surface}
 \alias{summary.normmix}
+\alias{summary.intensity_surface}
 \title{Create a 2d mixture with normal components}
 \usage{
 normmix(ps, mus, sigmas, lambda = NULL, win = NULL, estimated = FALSE)
@@ -68,7 +68,7 @@ object of class \code{intensity_surface}.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #normmix}
 
 The \code{print} function can be used on a \code{normmix}
@@ -78,8 +78,7 @@ The \code{summary} function can be used on a \code{normmix}
 or \code{intensity_surface} object in order to display additional information.
 }
 \examples{
-
-\dontrun{
+\donttest{
 mix1 <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)),
  sigmas = list(.01*diag(2), .01*diag(2)))
 mix1
@@ -90,11 +89,10 @@ intsurf1
 summary(intsurf1)}
 
 }
-\author{
-Yuchen Wang, Sakis Micheas
-}
 \seealso{
 \code{\link{rnormmix}} for
 generating a mixture with random parameters.
 }
-
+\author{
+Yuchen Wang, Sakis Micheas
+}

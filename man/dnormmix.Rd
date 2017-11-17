@@ -36,15 +36,13 @@ is given, the function multiplies the density with
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #dnormmix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- rnormmix(m = 3, sig0 = .1, df = 5,xlim= c(0, 5),
  ylim = c(0, 5))
-summary(truemix)
 normdens=dnormmix(truemix,xlim= c(0, 5), ylim = c(0, 5))
 #2d plots
 plot_density(as.data.frame(normdens))+ ggplot2::ggtitle(
@@ -67,9 +65,6 @@ plotmix_2d(intsurf)
 plot(intsurf)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{rnormmix}},
@@ -77,4 +72,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{plot_density}},
 \code{\link{to_int_surf}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

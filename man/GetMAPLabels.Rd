@@ -24,12 +24,11 @@ chain corresponding to MAP number of components.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #GetMAPLabels}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix <- normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
  sigmas = list(.02*diag(2), .05*diag(2), .01*diag(2)))
 intsurf=to_int_surf(truemix,lambda = 100, win = spatstat::square(1))
@@ -47,13 +46,12 @@ est_compBD <- GetMAPLabels(fitBD)
 plot(pp1, estcomp = est_compBD, colors = TRUE)}
 
 }
-\author{
-Jiaxun Chen
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}},
 \code{\link{rsppmix}},
 \code{\link{est_mix_damcmc}}
 }
-
+\author{
+Jiaxun Chen
+}

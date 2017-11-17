@@ -4,18 +4,19 @@
 \alias{add_title}
 \title{Add a title to an existing ggplot2 plot}
 \usage{
-add_title(title, lambda = "", m = "", n = "", L = "", nmarks = "",
-  mu = "", theta = "", nu = "", gamma = "", sigma = "", df = "")
+add_title(title, lambda = "", m = "", n = "", t = "", L = "",
+  nmarks = "", mu = "", theta = "", nu = "", gamma = "", sigma = "",
+  df = "")
 }
 \arguments{
 \item{title}{The title to use for the plot.}
 
-\item{lambda, m, n, L, nmarks, mu, theta, nu, gamma, sigma, df}{Optional info
+\item{lambda, m, n, t, L, nmarks, mu, theta, nu, gamma, sigma, df}{Optional info
 to display on the second row of
 the title: average number of points,
 number of components in the mixture,
 number of points in the point pattern,
-number of iterations, total number
+time frame, number of iterations, total number
 of marks, a mean value, parameters
 for a Matern covariance model, a parameter gamma, and
 degrees of freedom, respectively.}
@@ -26,23 +27,21 @@ adds extra titles to a ggplot2 plot.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html#add_title}
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html#add_title}
 }
 \examples{
-
-\dontrun{
+\donttest{
 truemix = rnormmix(m = 5, sig0 = .1, df = 5,xlim= c(0, 3), ylim = c(0, 3))
 intsurf=to_int_surf(truemix,lambda = 100,win=spatstat::owin( c(0, 5),c(0, 5)))
 #plot the intensity surface
 plotmix_2d(intsurf)+add_title("A pretty projection of the 3d surface to 2 dimensions")}
 
 }
-\author{
-Yuchen Wang, Sakis Micheas
-}
 \seealso{
 \code{\link{rnormmix}},
 \code{\link{dnormmix}},
 \code{\link{MaternCov}}
 }
-
+\author{
+Sakis Micheas, Yuchen Wang
+}

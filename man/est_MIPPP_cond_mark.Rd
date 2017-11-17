@@ -7,7 +7,7 @@
 est_MIPPP_cond_mark(pp, m = 10, L = 50000, burnin = floor(L/10), hyper_da,
   hyper, fit_markdist = TRUE, truncate = FALSE, grayscale = FALSE,
   discrete_mark = TRUE, LL = 256, open_new_window = FALSE,
-  show_plots = TRUE)
+  show_plots = TRUE, compute_surfaces = TRUE)
 }
 \arguments{
 \item{pp}{Marked point pattern of class \code{\link[spatstat]{ppp}}.}
@@ -53,7 +53,9 @@ For continuous marks set this to FALSE.}
 
 \item{open_new_window}{Open a new window for a plot.}
 
-\item{show_plots}{Logical variable requesting to produce the probability field plots for each mark.}
+\item{show_plots}{Logical variable requesting to produce the ground fits and probability field plots for each mark. If label switching is present, the MAPE surface is computed and returned, otherwise the PME.}
+
+\item{compute_surfaces}{Logical to request computation of the Average of Surfaces (if \code{m} is a vector) or the Bayesian Model Average (if \code{m} is an integer or missing). Default is TRUE. This is a SLOW operation.}
 }
 \value{
 An object of class \code{MIPPP_fit}, which is simply a list containing the following components:
@@ -82,41 +84,39 @@ in future versions of the \code{sppmix} package.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #est_MIPPP_cond_mark}
 }
 \examples{
-
-\dontrun{
+\donttest{
 #Create a marked point pattern; use randomization and 3 discrete marks
 newMPP=rMIPPP_cond_mark( params=c(.2,.5,.3),bigwin = spatstat::owin(c(-10,10),c(-10,10)))
 newMPP$params
 #supply the true number of components for each ground process
 m=c(newMPP$groundsurfs[[1]]$m, newMPP$groundsurfs[[2]]$m, newMPP$groundsurfs[[3]]$m)
-MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=m)
+MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=m,compute_surfaces=FALSE)
 #check out the mark distribution parameters
 #posterior means
 MIPPPfit$mark_dist
 #credible sets
-GetStats(MIPPPfit$gen_mark_ps[,1])#should contain .2
-GetStats(MIPPPfit$gen_mark_ps[,2])#should contain .5
-GetStats(MIPPPfit$gen_mark_ps[,3])#should contain .3
+GetStats(MIPPPfit$gen_mark_ps[,1])$CredibleSet#should contain .2
+GetStats(MIPPPfit$gen_mark_ps[,2])$CredibleSet#should contain .5
+GetStats(MIPPPfit$gen_mark_ps[,3])$CredibleSet#should contain .3
 #now pretend we do not know the truth as is usually the case. Supply an integer
 #for m so that the routine will fit a BDMCMC with this as the max number of
 #components and use the MAP number of components
-MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=7)
+MIPPPfit=est_MIPPP_cond_mark(newMPP$genMPP,m=7,compute_surfaces=FALSE)
 #check out the mark distribution parameters
 MIPPPfit$mark_dist
-GetStats(MIPPPfit$gen_mark_ps[,1])#should contain .2
-GetStats(MIPPPfit$gen_mark_ps[,2])#should contain .5
-GetStats(MIPPPfit$gen_mark_ps[,3])#should contain .3}
+GetStats(MIPPPfit$gen_mark_ps[,1])$CredibleSet#should contain .2
+GetStats(MIPPPfit$gen_mark_ps[,2])$CredibleSet#should contain .5
+GetStats(MIPPPfit$gen_mark_ps[,3])$CredibleSet#should contain .3}
 
-}
-\author{
-Sakis Micheas, Jiaxun Chen
 }
 \seealso{
 \code{\link{rMIPPP_cond_mark}},
 \code{\link{GetStats}}
 }
-
+\author{
+Sakis Micheas, Jiaxun Chen
+}

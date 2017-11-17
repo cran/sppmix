@@ -4,7 +4,8 @@
 \alias{mc_gof}
 \title{Monte Carlo goodness of fit test}
 \usage{
-mc_gof(pp, intsurf, alpha, L = 20000, burnin = L/10, truncate = FALSE)
+mc_gof(pp, intsurf, alpha = 0.5, L = 20000, burnin = floor(0.1 * L),
+  truncate = FALSE)
 }
 \arguments{
 \item{pp}{Point pattern object of class \code{ppp}.}
@@ -28,7 +29,7 @@ surface.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #mc_gof}
 }
 \details{
@@ -40,8 +41,7 @@ i.e., the \code{a}th percentile of the distribution of the test statistic.
 Make sure that L is large in order to get accurate results.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # Create the intensity surface
 intsurf1 <- normmix(ps = c(.3, .7), mus = list(c(0.2, 0.2), c(.8, .8)), sigmas =
  list(.01*diag(2), .01*diag(2)), lambda = 100, win = spatstat::square(1))
@@ -58,11 +58,10 @@ intsurf2 <- normmix(ps = c(.5, .5), mus = list(c(0.2, 0.8), c(.8, .2)), sigmas =
 mc_gof(pp1, intsurf2, 0.05)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{rsppmix}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

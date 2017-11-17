@@ -2,17 +2,18 @@
 % Please edit documentation in R/datasets.R
 \docType{data}
 \name{Datasets}
+\alias{Datasets}
+\alias{ChicagoCrime2015}
+\alias{ChicagoArea}
 \alias{CAQuakes2014}
 \alias{CAQuakes2014.RichterOver3.0}
-\alias{ChicagoArea}
-\alias{ChicagoCrime2015}
-\alias{ContinentalUSA_state_names}
-\alias{Datasets}
-\alias{MOAggIncomeLevelsPerCounty}
-\alias{Tornadoes2011MO}
 \alias{TornadoesAll}
+\alias{Tornadoes2011MO}
+\alias{ContinentalUSA_state_names}
+\alias{MOAggIncomeLevelsPerCounty}
+\alias{USAStatesCounties2016}
 \title{Datasets}
-\format{All datasets are objects of type \code{\link[spatstat]{ppp}} and \code{sppmix}.}
+\format{All datasets are objects of type \code{\link[spatstat]{ppp}} and \code{sppmix}, except for object \code{USAStatesCounties2016}.}
 \usage{
 Datasets()
 
@@ -31,6 +32,8 @@ Tornadoes2011MO
 ContinentalUSA_state_names
 
 MOAggIncomeLevelsPerCounty
+
+USAStatesCounties2016
 }
 \description{
 Several datasets have been included in the
@@ -41,7 +44,7 @@ use these datasets.
 
 For basic examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Datasets}
 
 \code{ChicagoCrime2015}
@@ -54,7 +57,7 @@ In particular, there are 654 reported incident locations, 188 kidnappings, and 4
 
 \code{ChicagoArea}
 
-NThe \code{ChicagoArea} object contains the coordinates for the different neighborhoods of the city of Chicago.
+The \code{ChicagoArea} object contains the coordinates for the different neighborhoods of the city of Chicago.
 
 \code{CAQuakes2014}
 
@@ -123,10 +126,22 @@ In some examples we use the aggregate income levels
 per county for the state of Missouri, USA.
 This data is contained in the
 object \code{MOAggIncomeLevelsPerCounty}.
+
+\code{USAStatesCounties2016}
+
+In many examples we use the boundaries of the states and counties of the USA.
+The Cartographic Boundary Shapefiles (boundary data) is provided by the
+USA Census Bureau at \url{https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html}.
+This is a list containing \code{StateNames} (the state and territory names, 56 total),
+\code{StatePolygons} (a list of size 56, containing a list of matrices describing the boundaries of the states/territories),
+and \code{CountiesbyState} (a list of size 56, with each list element a list containing element
+\code{CountyName} and \code{CountyPolies}, describing the county name of the specific state and polygons used).
+For example, USAStatesCounties2016$StateNames[1] is Alabama, and
+USAStatesCounties2016$CountiesbyState[[1]]$CountyName[1] corresponds to Escambia county
+which can be plotted using the boundary coordinates in USAStatesCounties2016$CountiesbyState[[1]]$CountyPolies[[1]].
 }
 \examples{
-
-\dontrun{
+\donttest{
 ChicagoCrime2015
 summary(ChicagoCrime2015)
 plot(ChicagoCrime2015)+add_title("Chicago Crime, 2015")
@@ -143,4 +158,3 @@ plot(Tornadoes2011MO)+add_title("Tornado events about Missouri, 2011")
 Sakis Micheas
 }
 \keyword{datasets}
-

@@ -20,22 +20,20 @@ returns the resulting fit object.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #drop_realization}
 }
 \examples{
-
-\dontrun{
+\donttest{
 fit <- est_mix_bdmcmc(spatstat::redwood, m = 5)
 fit
 drop_realization(fit, 500)
 drop_realization(fit, fit$numcomp != 5)}
 
 }
-\author{
-Yuchen Wang, Sakis Micheas
-}
 \seealso{
 \code{\link{est_mix_bdmcmc}}
 }
-
+\author{
+Sakis Micheas, Yuchen Wang
+}

@@ -33,7 +33,7 @@ total number of realizations, excluding the burnin realizations.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #check_labels}
 }
 \details{
@@ -59,8 +59,7 @@ is an average on surfaces based on each of the posterior realizations, and as su
 does not suffer from the label switching problem.
 }
 \examples{
-
-\dontrun{
+\donttest{
 # generate data
 mix1 = normmix(ps=c(.4, .2,.4), mus=list(c(0.3, 0.3), c(.5,.5),c(0.7, 0.7)),
  sigmas = list(.02*diag(2),.05*diag(2), .02*diag(2)),lambda = 100,
@@ -87,9 +86,6 @@ plot_chains(post_fixed)
 plot_chains(post_fixed,separate = FALSE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas
-}
 \references{
 Jasra, A., Holmes, C.C. and Stephens, D. A. (2005). Markov Chain Monte Carlo Methods and the Label Switching Problem in Bayesian Mixtures. Statistical Science, 20, 50-67.
 }
@@ -100,4 +96,6 @@ Jasra, A., Holmes, C.C. and Stephens, D. A. (2005). Markov Chain Monte Carlo Met
 \code{\link{plot_chains}},
 \code{\link{FixLS_da}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas
+}

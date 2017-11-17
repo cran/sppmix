@@ -5,7 +5,7 @@
 \title{Plot a spatial point pattern}
 \usage{
 \method{plot}{sppmix}(x, mus, estcomp, open_new_window = FALSE,
-  colors = FALSE, showmarks = FALSE, ...)
+  colors = FALSE, showmarks = TRUE, whichmark = 1, ...)
 }
 \arguments{
 \item{x}{A point pattern of class \code{\link{sppmix}} or
@@ -27,7 +27,9 @@ on which component they belong to.}
 
 \item{showmarks}{Logical flag requesting
 to plot each point with a different circle size
-according to its mark value.}
+according to its mark value. If the mark is a data.frame object (multivariate marks), the first column (mark) is used as the the marks and displayed.}
+
+\item{whichmark}{If multivariate marks, choose to display this one.}
 
 \item{...}{Additional parameters to the \code{add_title} function. Valid choices
 are m, n and L. To add a different title than the default, use \code{add_title} after the plot call (see examples below).}
@@ -39,12 +41,11 @@ plot a spatstat \code{\link[spatstat]{ppp}} object.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plot.sppmix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 mix1 <- rnormmix(5, sig0 = .01, df = 5, xlim=c(0, 5), ylim=c(0, 5))
 intsurf1=to_int_surf(mix1, lambda = 40, win =spatstat::owin( c(0, 5),c(0, 5)))
 pp1 <- rsppmix(intsurf1)
@@ -58,7 +59,7 @@ plot(pp1, mus = intsurf1$mus)+ add_title(
  m=intsurf1$m,n=pp1$n)
 #use the demo intensity surface
 demo_intsurf
-pp2 <- rsppmix(demo_intsurf)
+pp2 <- rsppmix(demo_intsurf,marks = 1:3)
 plot(pp2)
 plot(pp2, mus = demo_intsurf$mus)#plot the mixture means as well
 #plot the points with different colors depending on the true component label
@@ -72,9 +73,6 @@ newMPP=rMIPPP_cond_mark()
 plot(newMPP$genMPP, showmarks=TRUE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}},
@@ -84,4 +82,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{GetMAPLabels}},
 \code{\link{rMIPPP_cond_mark}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}

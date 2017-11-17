@@ -9,14 +9,13 @@
 #'
 #' For basic examples see
 #'
-#' \url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+#' \url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #' #Datasets}
 #'
-#' @format All datasets are objects of type \code{\link[spatstat]{ppp}} and \code{sppmix}.
+#' @format All datasets are objects of type \code{\link[spatstat]{ppp}} and \code{sppmix}, except for object \code{USAStatesCounties2016}.
 #' @author Sakis Micheas
 #' @examples
-#'
-#' \dontrun{
+#' \donttest{
 #' ChicagoCrime2015
 #' summary(ChicagoCrime2015)
 #' plot(ChicagoCrime2015)+add_title("Chicago Crime, 2015")
@@ -52,7 +51,7 @@ Datasets <- function()
 #'
 #' \code{ChicagoArea}
 #'
-#' NThe \code{ChicagoArea} object contains the coordinates for the different neighborhoods of the city of Chicago.
+#' The \code{ChicagoArea} object contains the coordinates for the different neighborhoods of the city of Chicago.
 "ChicagoArea"
 
 #' @rdname Datasets
@@ -146,3 +145,20 @@ Datasets <- function()
 #' This data is contained in the
 #' object \code{MOAggIncomeLevelsPerCounty}.
 "MOAggIncomeLevelsPerCounty"
+
+#' @rdname Datasets
+#' @description
+#'
+#' \code{USAStatesCounties2016}
+#'
+#' In many examples we use the boundaries of the states and counties of the USA.
+#' The Cartographic Boundary Shapefiles (boundary data) is provided by the
+#' USA Census Bureau at \url{https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html}.
+#' This is a list containing \code{StateNames} (the state and territory names, 56 total),
+#' \code{StatePolygons} (a list of size 56, containing a list of matrices describing the boundaries of the states/territories),
+#' and \code{CountiesbyState} (a list of size 56, with each list element a list containing element
+#' \code{CountyName} and \code{CountyPolies}, describing the county name of the specific state and polygons used).
+#' For example, USAStatesCounties2016$StateNames[1] is Alabama, and
+#' USAStatesCounties2016$CountiesbyState[[1]]$CountyName[1] corresponds to Escambia county
+#' which can be plotted using the boundary coordinates in USAStatesCounties2016$CountiesbyState[[1]]$CountyPolies[[1]].
+"USAStatesCounties2016"

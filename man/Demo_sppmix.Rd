@@ -17,12 +17,11 @@ the \code{sppmix} package.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #Demo_sppmix}
 }
 \examples{
-
-\dontrun{
+\donttest{
 Demo_sppmix()#shows all available demos and opens the vignettes page
 Demo_sppmix(1)#demo on sppmix objects}
 
@@ -30,4 +29,3 @@ Demo_sppmix(1)#demo on sppmix objects}
 \author{
 Sakis Micheas
 }
-

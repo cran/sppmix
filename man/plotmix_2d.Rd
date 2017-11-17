@@ -47,12 +47,11 @@ a point pattern.
 
 For examples see
 
-\url{http://www.stat.missouri.edu/~amicheas/sppmix/sppmix_all_examples.html
+\url{http://faculty.missouri.edu/~micheasa/sppmix/sppmix_all_examples.html
 #plotmix_2d}
 }
 \examples{
-
-\dontrun{
+\donttest{
 # plot normmix density
 truemix<- rnormmix(m = 3, sig0 = .1, df = 5, xlim= c(0, 5), ylim = c(0, 5))
 summary(truemix)
@@ -86,9 +85,6 @@ plotmix_2d(intsurf,pp1, estcomp = est_comp, colors = TRUE)
 plotmix_2d(intsurf,pp1, estcomp = est_comp, contour = TRUE,colors = TRUE)}
 
 }
-\author{
-Jiaxun Chen, Sakis Micheas, Yuchen Wang
-}
 \seealso{
 \code{\link{normmix}},
 \code{\link{to_int_surf}},
@@ -98,4 +94,6 @@ Jiaxun Chen, Sakis Micheas, Yuchen Wang
 \code{\link{est_mix_damcmc}},
 \code{\link{PlotUSAStates}}
 }
-
+\author{
+Jiaxun Chen, Sakis Micheas, Yuchen Wang
+}
