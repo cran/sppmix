@@ -1,6 +1,6 @@
 Package: sppmix
 Title: Modeling Spatial Poisson and Related Point Processes
-Version: 1.0.2
+Version: 1.0.2.1
 Author: Jiaxun Chen <chenjiaxun9@hotmail.com>
  and Athanasios (Sakis) Christou Micheas <micheasa@missouri.edu>.
  Significant contributions on the package skeleton creation, plotting functions and other code by
@@ -17,6 +17,6 @@ RoxygenNote: 6.0.1
 Suggests: knitr,rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-11-17 02:16:15 UTC; sakis
+Packaged: 2020-10-14 15:47:49 UTC; hornik
 Repository: CRAN
-Date/Publication: 2017-11-17 08:35:59 UTC
+Date/Publication: 2020-10-14 16:34:52 UTC

@@ -1,4 +1,4 @@
-f736ffd5d0c43e4bc3cffd800d56c9da *DESCRIPTION
+6d0dc2570ee576c3dee142a496868883 *DESCRIPTION
 db4b9c32ec25ab6cd043ae200a9f9f2e *NAMESPACE
 079fe008d7f0ddc36192b0ea6e03a5ae *NEWS
 f8a9e95e8039cdcb8a1155144548d485 *R/GetKLEst.R
@@ -23,7 +23,7 @@ c4f7b6f7ea341d61fdb31612be3fdafd *R/other_funcs.R
 6925dcaeb6a6d825eafe842034b5d88f *R/sppmix.R
 45ff03948466f02bba61431c2a7633ed *R/summary_post.R
 f807e0576f1156da87cbff02b923663b *README.md
-2d4c8bd51cedef3f82574425dede1597 *build/vignette.rds
+7e711b33b0cc42fcaf20059072e48370 *build/vignette.rds
 1733a71846f6d3beaa501c6b2945c36c *data/CAQuakes2014.RichterOver3.0.rda
 0228c6496c93fa9ecae71b44ce6f99d5 *data/CAQuakes2014.rda
 a5cc941601290956628b51cb47ce09fa *data/ChicagoArea.rda
@@ -51,8 +51,8 @@ f44f99ad0c0d3d685f447d82e02103ac *demo/use_sppmix_modelcheck.R
 fc61b1acd33e9658f6f3f569eff33e17 *demo/use_sppmix_objects.R
 2e205ec087f04bbcbbf5a32a2f9d9dc1 *demo/use_sppmix_plots.R
 d6d7caa6dc5dc437a9985592c34d978d *inst/doc/tutorials_link.Rmd
-bca346e98cb7ccd3ed2c976734a79947 *inst/doc/tutorials_link.html
-0412b6a83ac19faef7053bb4fb35aa1c *inst/include/sppmix.h
+439089cde80616bb69bf47befe6c9d02 *inst/doc/tutorials_link.html
+04f658a7d58cac7330fa73a925f271f8 *inst/include/sppmix.h
 e6f83b1b257cf947f38d2739c6bbe3bc *man/CompareSurfs.Rd
 bb51306670002a65d0a8db6e7cc6189b *man/Count_pts.Rd
 53ee7a2a61596cce0ebf92c6c9f2cfd5 *man/Datasets.Rd
